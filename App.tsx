@@ -4,6 +4,10 @@ import HomePage from './frontend/src/components/HomePage';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Game from './frontend/src/components/Game';
+import getGames from './server/db';
+
+
+getGames()
 
 const Stack = createNativeStackNavigator();
 
@@ -15,6 +19,9 @@ export default function App() {
           name="Home"
           component={HomePage}
           options={{title: 'Welcome'}}
+
+          
+
         />
         <Stack.Screen
         name='Game'
