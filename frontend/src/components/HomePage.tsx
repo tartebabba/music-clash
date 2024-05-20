@@ -33,7 +33,7 @@ export default function HomePage({ navigation }: Props) {
       setToken(access_token);
       navigation.navigate('Game');
       axios
-        .get('https://api.spotify.com/v1/me/top/', {
+        .get('https://api.spotify.com/v1/me/top/artists', {
           headers: {
             Authorization: `Bearer ${access_token}`,
           },
