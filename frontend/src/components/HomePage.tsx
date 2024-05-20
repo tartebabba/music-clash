@@ -19,17 +19,21 @@ export default function HomePage({navigation}: Props) {
             }
     });
 
-    function handlePress() {
+    function handleGamePress() {
         navigation.navigate('Game')
+    }
+
+    function handleLoginPress() {
+        navigation.navigate('Login')
     }
 
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Music Clash</Text>
-            <TouchableOpacity onPress={handlePress}>
+            <TouchableOpacity onPress={handleGamePress}>
             <Text style={styles.button}>Play game</Text>
             </TouchableOpacity>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={handleLoginPress}>
             <Text style={styles.button}>Login</Text>
             </TouchableOpacity>
             <TouchableOpacity>
