@@ -1,9 +1,11 @@
+import { useState } from "react";
 import { Text, View, FlatList, StyleSheet, TouchableOpacity } from "react-native";
 
 export default function Game() {
 
-    const styles = StyleSheet.create({
-        container: {
+  
+  const styles = StyleSheet.create({
+    container: {
           flex: 1,
           justifyContent: "center",
           alignItems: "center",
@@ -30,14 +32,42 @@ export default function Game() {
             width: '100%',
             height: '100%',
             position: 'relative'
+        },
+        selectedCard: {
+          backgroundColor: 'lightgreen',
+          width: '100%',
+          height: '100%',
+          position: 'relative'
         }
-      });
+        });
+        
+        const items = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
+        const [selected, setSelected] = useState<number[]>([]);
 
-    const items = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
-
-    function handleClick() {
+    function handleClick(index: number) {
+      if (selected.includes(index)) {
+        setSelected(selected.filter((item) => {
+          return item !== index;
+        }))    
+      } else if (selected.length < 4) {
+        setSelected([...selected, index])
+      }
     }
 
+    const groups = [[1, 4, 6, 9], [2, 3, 7, 8], [5, 10, 11, 12], [13, 14, 15, 16]]
+
+    function handleSubmit() {
+      
+      const guess = selected.sort().join('');
+      console.log(guess);
+
+      for (let i = 0; i < groups.length; i++) {
+        if (groups[i].sort().join('') === guess) {
+          console.log('winner');
+        }
+      }
+    }
+    
     return (
         <View style={styles.container}>
           <View style={styles.centered}>
@@ -48,8 +78,8 @@ export default function Game() {
               renderItem={({ item, index }) => (
                 <View style={styles.cardContainer}>
                   <TouchableOpacity
-                    onPress={() => handleClick()}
-                    style={styles.cardButton}>
+                    onPress={() => handleClick(item)}
+                    style={selected.includes(index + 1) ? styles.selectedCard : styles.cardButton}>
                     <View style={styles.card}>
                       <Text>{item}</Text>
                     </View>
@@ -58,6 +88,9 @@ export default function Game() {
               )}
               keyExtractor={(item) => item.toString()}
             />
+            <TouchableOpacity onPress={handleSubmit}>
+              <Text>Submit</Text>
+            </TouchableOpacity>
           </View>
         </View>
       );
