@@ -4,6 +4,7 @@ import HomePage from './frontend/src/components/HomePage';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Game from './frontend/src/components/Game';
+import Login from './frontend/src/components/LoginPage';
 
 const Stack = createNativeStackNavigator();
 
@@ -19,6 +20,10 @@ export default function App() {
         <Stack.Screen
         name='Game'
         component={Game}
+        />
+        <Stack.Screen
+        name='Login'
+        component={Login}
         />
         </Stack.Navigator>
       </NavigationContainer>
