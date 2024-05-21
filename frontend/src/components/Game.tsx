@@ -43,6 +43,21 @@ export default function Game() {
       height: '100%',
       position: 'relative',
     },
+    foundCard: {
+      width: '100%',
+      height: '100%',
+      position: 'relative',
+    },
+    button: {
+      backgroundColor: 'lightgrey',
+      padding: 10,
+      margin: 10,
+    },
+    disableButton: {
+      backgroundColor: 'darkgrey',
+      padding: 10,
+      margin: 10,
+    },
   });
 
   const items = [
@@ -64,6 +79,7 @@ export default function Game() {
     '16',
   ];
   const [selected, setSelected] = useState<string[]>([]);
+  const [foundGroups, setFoundGroups] = useState<string[]>([]);
   const [guessResult, setGuessResult] = useState('');
 
   function handleClick(item: string) {
@@ -91,11 +107,29 @@ export default function Game() {
 
     for (let i = 0; i < groups.length; i++) {
       if (groups[i].sort().join('') === guess) {
-        console.log('winner');
+        setFoundGroups([...foundGroups, ...selected]);
         setGuessResult('correct');
+
+        console.log(foundGroups.length);
+
+        if (foundGroups.length === 12) {
+          setGuessResult('winner');
+        }
       }
     }
     setSelected([]);
+  }
+
+  function handlePlayAgain() {
+    setFoundGroups([]);
+    setGuessResult('');
+  }
+
+  function getBackgroundColor(item: string) {
+    const colours = ['red', 'blue', 'purple', 'green'];
+    const index = foundGroups.indexOf(item);
+    const groupIndex = Math.floor(index / 4);
+    return colours[groupIndex];
   }
 
   return (
@@ -110,10 +144,18 @@ export default function Game() {
               <TouchableOpacity
                 onPress={() => handleClick(item)}
                 style={
-                  selected.includes(item)
-                    ? styles.selectedCard
-                    : styles.cardButton
+                  foundGroups.includes(item)
+                    ? [
+                        styles.foundCard,
+                        {
+                          backgroundColor: getBackgroundColor(item),
+                        },
+                      ]
+                    : selected.includes(item)
+                      ? styles.selectedCard
+                      : styles.cardButton
                 }
+                disabled={foundGroups.includes(item)}
               >
                 <View style={styles.card}>
                   <Text>{item}</Text>
@@ -123,15 +165,27 @@ export default function Game() {
           )}
           keyExtractor={(item) => item.toString()}
         />
-        <TouchableOpacity onPress={handleSubmit}>
+        <TouchableOpacity
+          disabled={selected.length !== 4}
+          style={selected.length !== 4 ? styles.disableButton : styles.button}
+          onPress={handleSubmit}
+        >
           <Text>Submit</Text>
         </TouchableOpacity>
         {guessResult !== '' ? (
-          guessResult === 'correct' ? (
+          guessResult === 'correct' || guessResult === 'winner' ? (
             <Text>Correct</Text>
           ) : (
             <Text>Try again</Text>
           )
+        ) : null}
+        {guessResult === 'winner' ? (
+          <>
+            <Text>Winner</Text>{' '}
+            <TouchableOpacity style={styles.button} onPress={handlePlayAgain}>
+              <Text>Play again</Text>
+            </TouchableOpacity>
+          </>
         ) : null}
       </View>
     </View>
