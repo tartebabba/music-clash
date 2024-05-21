@@ -114,20 +114,22 @@ export default function Game({
   function handleSubmit() {
     const guess = selected.sort().join('');
     setGuessResult('incorrect');
+    let correct = false;
 
     for (let i = 0; i < groups.length; i++) {
       if (groups[i].sort().join('') === guess) {
         setFoundGroups([...foundGroups, ...selected]);
         setGuessResult('correct');
+        correct = true;
 
         if (foundGroups.length === 12) {
           setGuessResult('winner');
         }
       }
-      console.log(guess, groups);
     }
     setSelected([]);
-    if (guessResult === 'incorrect') {
+    
+    if (correct === false) {
       setLives(lives - 1);
     }
   }
@@ -135,6 +137,7 @@ export default function Game({
   function handlePlayAgain() {
     setFoundGroups([]);
     setGuessResult('');
+    setLives(4);
   }
 
   function getBackgroundColor(item: string) {
@@ -169,7 +172,7 @@ export default function Game({
                       ? styles.selectedCard
                       : styles.cardButton
                 }
-                disabled={foundGroups.includes(item)}
+                disabled={foundGroups.includes(item) || lives === 0}
               >
                 <View style={styles.card}>
                   <Text>{item}</Text>
@@ -209,6 +212,17 @@ export default function Game({
             </TouchableOpacity>
           </>
         ) : null}
+        {lives === 0 ? 
+        (
+        <>
+            <Text>You lose</Text>{' '}
+            <TouchableOpacity
+              style={styles.button}
+              onPress={handlePlayAgain}
+            >
+              <Text>Play again</Text>
+            </TouchableOpacity>
+          </>) : null}
       </View>
     </View>
   );
