@@ -26,12 +26,12 @@ export default function HomePage({ navigation }: Props) {
   );
 
   const [token, setToken] = useState('');
+  const [favArtists, setFavArtists] = useState<string[]>([]);
 
   useEffect(() => {
     if (response?.type === 'success') {
       const { access_token } = response.params;
       setToken(access_token);
-      navigation.navigate('Game');
       axios
         .get('https://api.spotify.com/v1/me/top/artists', {
           headers: {
@@ -39,7 +39,8 @@ export default function HomePage({ navigation }: Props) {
           },
         })
         .then(({ data }) => {
-          console.log(data);
+          setFavArtists(data.items);
+          navigation.navigate('Game', { artists: favArtists });
         });
     }
   }, [response]);
@@ -61,7 +62,7 @@ export default function HomePage({ navigation }: Props) {
   });
 
   function handleGamePress() {
-    navigation.navigate('Game');
+    navigation.navigate('Game', { artists: [] });
   }
 
   function handleLoginPress() {

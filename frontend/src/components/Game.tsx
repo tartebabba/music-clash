@@ -6,8 +6,10 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from 'react-native';
+import { Props } from './types';
 
-export default function Game() {
+export default function Game({ route, navigation }: Props) {
+  console.log(route.params.artists);
   const styles = StyleSheet.create({
     container: {
       flex: 1,
