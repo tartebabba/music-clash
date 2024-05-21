@@ -1,7 +1,7 @@
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 type RootStackParamList = {
   HomePage: undefined;
-  Game: { artists: string[] };
+  Game: {artists: {name: string, tracks: string[]}[]};
   Login: undefined;
 };
 type Props = NativeStackScreenProps<RootStackParamList>;

@@ -38,7 +38,7 @@ export default function HomePage({ navigation }: Props) {
           },
         })
         .then(({ data }) => {
-          const gameTracks: string[] = [];
+          const gameTracks: {name: string, tracks: string[]}[] = [];
 
           for (let i = 0; i < 4; i++) {
             axios
@@ -54,13 +54,24 @@ export default function HomePage({ navigation }: Props) {
                 }
               )
               .then(({ data }) => {
-                for (let j = 0; j < 4; j++) {
-                  gameTracks.push(data.tracks[j].name);
+                const artistTracks = [];
 
-                  if (gameTracks.length === 16) {
-                    navigation.navigate('Game', { artists: gameTracks });
-                    console.log(gameTracks);
-                  }
+                console.log(data)
+                for (let j = 0; j < 4; j++) {
+                  artistTracks.push(data.tracks[j].name);
+                }
+                
+                const artistName = data.tracks[0].artists[0].name
+
+                const artistObj = {
+                  name: artistName,
+                  tracks: artistTracks
+                };
+
+                gameTracks.push(artistObj);
+
+                if (gameTracks.length === 4) {
+                  navigation.navigate('Game', { artists: gameTracks });
                 }
               });
           }

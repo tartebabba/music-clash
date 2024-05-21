@@ -10,10 +10,24 @@ import { GameScreenProps } from './types';
 
 export default function Game({ route, navigation }: GameScreenProps) {
   const { artists: items } = route.params;
-
-  const shuffledItems = [...items.sort(() => 0.5 - Math.random())];
+  const [shuffledItems, setShuffledItems] = useState<string[]>([]);
+  const [groups, setGroups] = useState<string[][]>([]);
+  
   console.log(items);
-  console.log(shuffledItems);
+
+  const gameItems = [...items[0].tracks, ...items[1].tracks, ...items[2].tracks, ...items[3].tracks];
+
+  useEffect(() => {
+    setGroups([
+      items[0].tracks,
+      items[1].tracks,
+      items[2].tracks,
+      items[3].tracks,
+    ]);
+
+    setShuffledItems([...gameItems.sort(() => 0.5 - Math.random())])
+  }, [])
+
 
   const styles = StyleSheet.create({
     container: {
@@ -83,12 +97,7 @@ export default function Game({ route, navigation }: GameScreenProps) {
     }
   }
 
-  const groups = [
-    items.slice(0, 4),
-    items.slice(4, 8),
-    items.slice(8, 12),
-    items.slice(12, 16),
-  ];
+  
 
   function handleSubmit() {
     const guess = selected.sort().join('');
@@ -99,12 +108,12 @@ export default function Game({ route, navigation }: GameScreenProps) {
         setFoundGroups([...foundGroups, ...selected]);
         setGuessResult('correct');
 
-        console.log(foundGroups.length);
-
+        
         if (foundGroups.length === 12) {
           setGuessResult('winner');
         }
       }
+      console.log(guess, groups);
     }
     setSelected([]);
   }
@@ -126,7 +135,7 @@ export default function Game({ route, navigation }: GameScreenProps) {
       <View style={styles.centered}>
         <Text>Welcome to Music Clash</Text>
         <FlatList
-          data={items}
+          data={shuffledItems}
           numColumns={4}
           renderItem={({ item }) => (
             <View style={styles.cardContainer}>
