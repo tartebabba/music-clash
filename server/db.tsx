@@ -1,7 +1,7 @@
 const { createClient } = require("@supabase/supabase-js")
 
-const supabaseUrl = 'URL';
-const supabaseKey = 'APIkey';
+const supabaseUrl = "https://ubmzmglsaigdsxuhgkmv.supabase.co"
+const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVibXptZ2xzYWlnZHN4dWhna212Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTYxOTMzMTUsImV4cCI6MjAzMTc2OTMxNX0.dAxuKuUP5yTDrP5pQK-FO--SSpyKE9j1GWKd6S6elDU"
 
 const supabase = createClient(supabaseUrl, supabaseKey);
 
@@ -36,15 +36,15 @@ interface GameDetails {
   song_4: string;
 }
 
-export async function postMultipleGameDetails(
-  postObject: GameDetails[]
-) {
-  const data = await supabase
-    .from('game_details')
-    .insert(postObject)
-    .select();
-  console.log(data);
-}
+// export async function postMultipleGameDetails(
+//   postObject: GameDetails[]
+// ) {
+//   const data = await supabase
+//     .from('game_details')
+//     .insert(postObject)
+//     .select();
+//   console.log(data);
+// }
 
 export async function createGame(
   postObject: GameDetails[]
@@ -113,8 +113,38 @@ export async function createUser(user: UserDetails) {
   }
 }
 
-  // make create user function - done
-  // make insert user_game function
-  // get songs by artist function
-  // table top 100 artists top 10 (artist_songs_combinations)
+interface UserGame {
+  user_id: number;
+  game_id: number;
+  date?: string;
+  won: boolean;
+  active: boolean;
+  completed_row_1: boolean;
+  completed_row_2: boolean;
+}
+
+export async function insertUserGame(userGame:UserGame) {
+  try {
+    let currentDate = new Date().toJSON();
+    userGame = {date: currentDate, ...userGame}
+    const {data, error} = await supabase
+    .from('user_games')
+    .insert(userGame)
+    .select()
+    if (error) {
+      console.log(error);
+      throw new Error(
+        `Error inserting user-game: ${error.message}`
+      );
+    }
+  }
+  catch(error){
+    console.error('Error in insertUserGame:', error);
+    throw error;
+  }
+}
+
+
+// table top 100 artists top 10 (artist_songs_combinations)
+// get songs by artist function
   // prevent duplicate artist/game data 
