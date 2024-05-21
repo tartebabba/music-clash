@@ -97,6 +97,7 @@ export default function Game({
     []
   );
   const [guessResult, setGuessResult] = useState('');
+  const [lives, setLives] = useState(4);
 
   function handleClick(item: string) {
     if (selected.includes(item)) {
@@ -126,6 +127,9 @@ export default function Game({
       console.log(guess, groups);
     }
     setSelected([]);
+    if (guessResult === 'incorrect') {
+      setLives(lives - 1);
+    }
   }
 
   function handlePlayAgain() {
@@ -144,6 +148,7 @@ export default function Game({
     <View style={styles.container}>
       <View style={styles.centered}>
         <Text>Welcome to Music Clash</Text>
+        <Text>{lives} lives remaining</Text>
         <FlatList
           data={shuffledItems}
           numColumns={4}
