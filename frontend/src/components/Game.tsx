@@ -18,52 +18,22 @@ export default function Game({
   >([]);
   const [groups, setGroups] = useState<string[][]>([]);
 
-  const gameItems = [
-    items[0].song_1,
-    items[0].song_2,
-    items[0].song_3,
-    items[0].song_4,
-    items[1].song_1,
-    items[1].song_2,
-    items[1].song_3,
-    items[1].song_4,
-    items[2].song_1,
-    items[2].song_2,
-    items[2].song_3,
-    items[2].song_4,
-    items[3].song_1,
-    items[3].song_2,
-    items[3].song_3,
-    items[3].song_4,
-  ];
+  const gameItems = items.flatMap((item) => [
+    item.song_1,
+    item.song_2,
+    item.song_3,
+    item.song_4,
+  ]);
 
   useEffect(() => {
-    setGroups([
-      [
-        items[0].song_1,
-        items[0].song_2,
-        items[0].song_3,
-        items[0].song_4,
-      ],
-      [
-        items[1].song_1,
-        items[1].song_2,
-        items[1].song_3,
-        items[1].song_4,
-      ],
-      [
-        items[2].song_1,
-        items[2].song_2,
-        items[2].song_3,
-        items[2].song_4,
-      ],
-      [
-        items[3].song_1,
-        items[3].song_2,
-        items[3].song_3,
-        items[3].song_4,
-      ],
-    ]);
+    setGroups(
+      items.map((item) => [
+        item.song_1,
+        item.song_2,
+        item.song_3,
+        item.song_4,
+      ])
+    );
 
     setShuffledItems([
       ...gameItems.sort(() => 0.5 - Math.random()),
