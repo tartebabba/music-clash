@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Text,
   View,
@@ -6,8 +6,27 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from 'react-native';
+import { GameScreenProps } from './types';
 
-export default function Game() {
+export default function Game({ route, navigation }: GameScreenProps) {
+  const { artists: items } = route.params;
+  const [shuffledItems, setShuffledItems] = useState<string[]>([]);
+  const [groups, setGroups] = useState<string[][]>([]);
+
+  const gameItems = [...items[0].tracks, ...items[1].tracks, ...items[2].tracks, ...items[3].tracks];
+
+  useEffect(() => {
+    setGroups([
+      items[0].tracks,
+      items[1].tracks,
+      items[2].tracks,
+      items[3].tracks,
+    ]);
+
+    setShuffledItems([...gameItems.sort(() => 0.5 - Math.random())])
+  }, [])
+
+
   const styles = StyleSheet.create({
     container: {
       flex: 1,
@@ -60,24 +79,6 @@ export default function Game() {
     },
   });
 
-  const items = [
-    '1',
-    '2',
-    '3',
-    '4',
-    '5',
-    '6',
-    '7',
-    '8',
-    '9',
-    '10',
-    '11',
-    '12',
-    '13',
-    '14',
-    '15',
-    '16',
-  ];
   const [selected, setSelected] = useState<string[]>([]);
   const [foundGroups, setFoundGroups] = useState<string[]>([]);
   const [guessResult, setGuessResult] = useState('');
@@ -94,12 +95,7 @@ export default function Game() {
     }
   }
 
-  const groups = [
-    ['1', '4', '6', '9'],
-    ['2', '3', '7', '8'],
-    ['5', '10', '11', '12'],
-    ['13', '14', '15', '16'],
-  ];
+  
 
   function handleSubmit() {
     const guess = selected.sort().join('');
@@ -110,12 +106,12 @@ export default function Game() {
         setFoundGroups([...foundGroups, ...selected]);
         setGuessResult('correct');
 
-        console.log(foundGroups.length);
-
+        
         if (foundGroups.length === 12) {
           setGuessResult('winner');
         }
       }
+      console.log(guess, groups);
     }
     setSelected([]);
   }
@@ -137,7 +133,7 @@ export default function Game() {
       <View style={styles.centered}>
         <Text>Welcome to Music Clash</Text>
         <FlatList
-          data={items}
+          data={shuffledItems}
           numColumns={4}
           renderItem={({ item }) => (
             <View style={styles.cardContainer}>

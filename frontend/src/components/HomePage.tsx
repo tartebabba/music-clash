@@ -31,7 +31,6 @@ export default function HomePage({ navigation }: Props) {
     if (response?.type === 'success') {
       const { access_token } = response.params;
       setToken(access_token);
-      navigation.navigate('Game');
       axios
         .get('https://api.spotify.com/v1/me/top/artists', {
           headers: {
@@ -39,7 +38,39 @@ export default function HomePage({ navigation }: Props) {
           },
         })
         .then(({ data }) => {
-          console.log(data);
+          const gameTracks: {name: string, tracks: string[]}[] = [];
+
+          for (let i = 0; i < 4; i++) {
+            axios
+              .get(
+                `https://api.spotify.com/v1/artists/${data.items[i].id}/top-tracks`,
+                {
+                  headers: {
+                    Authorization: `Bearer ${access_token}`,
+                  },
+                }
+              )
+              .then(({ data }) => {
+                const artistTracks = [];
+
+                for (let j = 0; j < 4; j++) {
+                  artistTracks.push(data.tracks[j].name);
+                }
+
+                const artistName = data.tracks[0].artists[0].name
+
+                const artistObj = {
+                  name: artistName,
+                  tracks: artistTracks
+                };
+
+                gameTracks.push(artistObj);
+
+                if (gameTracks.length === 4) {
+                  navigation.navigate('Game', { artists: gameTracks });
+                }
+              });
+          }
         });
     }
   }, [response]);
@@ -61,7 +92,7 @@ export default function HomePage({ navigation }: Props) {
   });
 
   function handleGamePress() {
-    navigation.navigate('Game');
+    navigation.navigate('Game', { artists: [] });
   }
 
   function handleLoginPress() {
