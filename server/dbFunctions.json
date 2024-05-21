@@ -51,5 +51,25 @@
             "song_3": "Love's Train",
             "song_4": "Skate"
           }]
+    },
+    "createUser":{
+        "description": "inserts a new user into users table. Throws an error if user already exists",
+        "exampleUserObject": {
+            "name": "John Doe",
+            "username": "john.doe",
+            "email": "john.doe@example.com",
+            "password": "SecureP@ssw0rd!"
+        }
+    },
+    "insertUserGame":{
+        "description": "inserts a new user-game into user_games table",
+        "exampleUserGameObject": {
+            "user_id": 1,
+            "game_id": 3,
+            "won": false,
+            "active": true,
+            "completed_row_1": true,
+            "completed_row_2": false
+          }
     }
 }
