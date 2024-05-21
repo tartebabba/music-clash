@@ -10,7 +10,11 @@ import { GameScreenProps } from './types';
 
 export default function Game({ route, navigation }: GameScreenProps) {
   const { artists: items } = route.params;
+
+  const shuffledItems = [...items.sort(() => 0.5 - Math.random())];
   console.log(items);
+  console.log(shuffledItems);
+
   const styles = StyleSheet.create({
     container: {
       flex: 1,
