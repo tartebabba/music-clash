@@ -6,10 +6,11 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from 'react-native';
-import { Props } from './types';
+import { GameScreenProps } from './types';
 
-export default function Game({ route, navigation }: Props) {
-  // console.log(route.params.artists);
+export default function Game({ route, navigation }: GameScreenProps) {
+  const { artists: items } = route.params;
+  console.log(items);
   const styles = StyleSheet.create({
     container: {
       flex: 1,
@@ -62,7 +63,7 @@ export default function Game({ route, navigation }: Props) {
     },
   });
 
-  const items = route.params.artists;
+  // const items = route.params.artists;
 
   const [selected, setSelected] = useState<string[]>([]);
   const [foundGroups, setFoundGroups] = useState<string[]>([]);
@@ -79,13 +80,12 @@ export default function Game({ route, navigation }: Props) {
       setSelected([...selected, item]);
     }
   }
-  
-  
+
   const groups = [
-    items.slice(0, 4), 
+    items.slice(0, 4),
     items.slice(4, 8),
     items.slice(8, 12),
-    items.slice(12, 16),   
+    items.slice(12, 16),
   ];
 
   function handleSubmit() {

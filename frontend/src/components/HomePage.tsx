@@ -38,27 +38,33 @@ export default function HomePage({ navigation }: Props) {
           },
         })
         .then(({ data }) => {
-          const gameTracks: number[] = [];
+          const gameTracks: string[] = [];
 
           for (let i = 0; i < 4; i++) {
             axios
-            .get(`https://api.spotify.com/v1/artists/${data.items[i].id}/top-tracks`, {
-              headers: {
-                Authorization: `Bearer ${access_token}`,
-              }
-            })
-            .then(({ data }) => {
-              for (let j = 0; j < 4; j++) {              
-                gameTracks.push(data.tracks[j].name)
+              .get(
+                `https://api.spotify.com/v1/artists/${data.items[i].id}/top-tracks`,
+                {
+                  headers: {
+                    Authorization: `Bearer ${access_token}`,
+                  },
+                  params: {
+                    market: 'GB', // Make sure to include the market parameter
+                  },
+                }
+              )
+              .then(({ data }) => {
+                for (let j = 0; j < 4; j++) {
+                  gameTracks.push(data.tracks[j].name);
 
-                if (gameTracks.length === 16) {
-                  navigation.navigate('Game', { screen: 'Game', params:  { artists: gameTracks }});
-                  console.log(gameTracks);
-                } 
-              }
-            })
+                  if (gameTracks.length === 16) {
+                    navigation.navigate('Game', { artists: gameTracks });
+                    console.log(gameTracks);
+                  }
+                }
+              });
           }
-        })
+        });
     }
   }, [response]);
 
