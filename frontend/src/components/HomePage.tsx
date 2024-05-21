@@ -49,8 +49,7 @@ export default function HomePage({ navigation }: Props) {
       fontSize: 40,
     },
     button: {
-      backgroundColor: '#000',
-      color: '#fff',
+      backgroundColor: 'lightgrey',
       padding: 10,
       margin: 10,
     },
@@ -77,14 +76,14 @@ export default function HomePage({ navigation }: Props) {
     <View style={styles.container}>
       <Text style={styles.title}>Music Clash</Text>
       <TouchableOpacity style={styles.button} onPress={handleGamePress}>
-        <Text style={{ color: '#fff' }}>Play game</Text>
+        <Text style={{ color: '#000' }}>Play game</Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.button} onPress={handleLoginPress}>
-        <Text style={{ color: '#fff' }}>Login</Text>
+        <Text style={{ color: '#000' }}>Login</Text>
       </TouchableOpacity>
       {token === '' ? (
         <TouchableOpacity style={styles.button} onPress={handleSpotifyPress}>
-          <Text style={{ color: '#fff' }}>Play with Spotify</Text>
+          <Text style={{ color: '#000' }}>Play with Spotify</Text>
         </TouchableOpacity>
       ) : null}
     </View>
