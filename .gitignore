@@ -35,5 +35,5 @@ yarn-error.*
 # typescript
 *.tsbuildinfo
 
-supabase_setup.js
+supabase-setup.js
 test.tsx
