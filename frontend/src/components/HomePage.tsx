@@ -1,15 +1,24 @@
 import { useState, useEffect } from 'react';
-import { TouchableOpacity, Text, View, StyleSheet } from 'react-native';
+import {
+  TouchableOpacity,
+  Text,
+  View,
+  StyleSheet,
+} from 'react-native';
 import { Props } from './types';
 import axios from 'axios';
 
 import * as WebBrowser from 'expo-web-browser';
-import { makeRedirectUri, useAuthRequest } from 'expo-auth-session';
+import {
+  makeRedirectUri,
+  useAuthRequest,
+} from 'expo-auth-session';
 
 WebBrowser.maybeCompleteAuthSession();
 
 const discovery = {
-  authorizationEndpoint: 'https://accounts.spotify.com/authorize',
+  authorizationEndpoint:
+    'https://accounts.spotify.com/authorize',
   tokenEndpoint: 'https://accounts.spotify.com/api/token',
 };
 
@@ -17,7 +26,11 @@ export default function HomePage({ navigation }: Props) {
   const [request, response, promptAsync] = useAuthRequest(
     {
       clientId: 'e9cd46ff618640158846ea3d309d9c7d',
-      scopes: ['user-read-email', 'user-read-private', 'user-top-read'],
+      scopes: [
+        'user-read-email',
+        'user-read-private',
+        'user-top-read',
+      ],
       usePKCE: false,
       redirectUri: makeRedirectUri(),
       responseType: 'token',
@@ -38,7 +51,13 @@ export default function HomePage({ navigation }: Props) {
           },
         })
         .then(({ data }) => {
-          const gameTracks: {name: string, tracks: string[]}[] = [];
+          const gameTracks: {
+            artist: string;
+            song_1: string;
+            song_2: string;
+            song_3: string;
+            song_4: string;
+          }[] = [];
 
           for (let i = 0; i < 4; i++) {
             axios
@@ -57,17 +76,23 @@ export default function HomePage({ navigation }: Props) {
                   artistTracks.push(data.tracks[j].name);
                 }
 
-                const artistName = data.tracks[0].artists[0].name
+                const artistName =
+                  data.tracks[0].artists[0].name;
 
                 const artistObj = {
-                  name: artistName,
-                  tracks: artistTracks
+                  artist: artistName,
+                  song_1: artistTracks[0],
+                  song_2: artistTracks[1],
+                  song_3: artistTracks[2],
+                  song_4: artistTracks[3],
                 };
 
                 gameTracks.push(artistObj);
 
                 if (gameTracks.length === 4) {
-                  navigation.navigate('Game', { artists: gameTracks });
+                  navigation.navigate('Game', {
+                    artists: gameTracks,
+                  });
                 }
               });
           }
@@ -106,15 +131,26 @@ export default function HomePage({ navigation }: Props) {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Music Clash</Text>
-      <TouchableOpacity style={styles.button} onPress={handleGamePress}>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={handleGamePress}
+      >
         <Text style={{ color: '#000' }}>Play game</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.button} onPress={handleLoginPress}>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={handleLoginPress}
+      >
         <Text style={{ color: '#000' }}>Login</Text>
       </TouchableOpacity>
       {token === '' ? (
-        <TouchableOpacity style={styles.button} onPress={handleSpotifyPress}>
-          <Text style={{ color: '#000' }}>Play with Spotify</Text>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={handleSpotifyPress}
+        >
+          <Text style={{ color: '#000' }}>
+            Play with Spotify
+          </Text>
         </TouchableOpacity>
       ) : null}
     </View>

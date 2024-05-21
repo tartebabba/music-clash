@@ -8,24 +8,67 @@ import {
 } from 'react-native';
 import { GameScreenProps } from './types';
 
-export default function Game({ route, navigation }: GameScreenProps) {
+export default function Game({
+  route,
+  navigation,
+}: GameScreenProps) {
   const { artists: items } = route.params;
-  const [shuffledItems, setShuffledItems] = useState<string[]>([]);
+  const [shuffledItems, setShuffledItems] = useState<
+    string[]
+  >([]);
   const [groups, setGroups] = useState<string[][]>([]);
 
-  const gameItems = [...items[0].tracks, ...items[1].tracks, ...items[2].tracks, ...items[3].tracks];
+  const gameItems = [
+    items[0].song_1,
+    items[0].song_2,
+    items[0].song_3,
+    items[0].song_4,
+    items[1].song_1,
+    items[1].song_2,
+    items[1].song_3,
+    items[1].song_4,
+    items[2].song_1,
+    items[2].song_2,
+    items[2].song_3,
+    items[2].song_4,
+    items[3].song_1,
+    items[3].song_2,
+    items[3].song_3,
+    items[3].song_4,
+  ];
 
   useEffect(() => {
     setGroups([
-      items[0].tracks,
-      items[1].tracks,
-      items[2].tracks,
-      items[3].tracks,
+      [
+        items[0].song_1,
+        items[0].song_2,
+        items[0].song_3,
+        items[0].song_4,
+      ],
+      [
+        items[1].song_1,
+        items[1].song_2,
+        items[1].song_3,
+        items[1].song_4,
+      ],
+      [
+        items[2].song_1,
+        items[2].song_2,
+        items[2].song_3,
+        items[2].song_4,
+      ],
+      [
+        items[3].song_1,
+        items[3].song_2,
+        items[3].song_3,
+        items[3].song_4,
+      ],
     ]);
 
-    setShuffledItems([...gameItems.sort(() => 0.5 - Math.random())])
-  }, [])
-
+    setShuffledItems([
+      ...gameItems.sort(() => 0.5 - Math.random()),
+    ]);
+  }, []);
 
   const styles = StyleSheet.create({
     container: {
@@ -80,7 +123,9 @@ export default function Game({ route, navigation }: GameScreenProps) {
   });
 
   const [selected, setSelected] = useState<string[]>([]);
-  const [foundGroups, setFoundGroups] = useState<string[]>([]);
+  const [foundGroups, setFoundGroups] = useState<string[]>(
+    []
+  );
   const [guessResult, setGuessResult] = useState('');
 
   function handleClick(item: string) {
@@ -95,8 +140,6 @@ export default function Game({ route, navigation }: GameScreenProps) {
     }
   }
 
-  
-
   function handleSubmit() {
     const guess = selected.sort().join('');
     setGuessResult('incorrect');
@@ -106,7 +149,6 @@ export default function Game({ route, navigation }: GameScreenProps) {
         setFoundGroups([...foundGroups, ...selected]);
         setGuessResult('correct');
 
-        
         if (foundGroups.length === 12) {
           setGuessResult('winner');
         }
@@ -144,7 +186,8 @@ export default function Game({ route, navigation }: GameScreenProps) {
                     ? [
                         styles.foundCard,
                         {
-                          backgroundColor: getBackgroundColor(item),
+                          backgroundColor:
+                            getBackgroundColor(item),
                         },
                       ]
                     : selected.includes(item)
@@ -163,13 +206,18 @@ export default function Game({ route, navigation }: GameScreenProps) {
         />
         <TouchableOpacity
           disabled={selected.length !== 4}
-          style={selected.length !== 4 ? styles.disableButton : styles.button}
+          style={
+            selected.length !== 4
+              ? styles.disableButton
+              : styles.button
+          }
           onPress={handleSubmit}
         >
           <Text>Submit</Text>
         </TouchableOpacity>
         {guessResult !== '' ? (
-          guessResult === 'correct' || guessResult === 'winner' ? (
+          guessResult === 'correct' ||
+          guessResult === 'winner' ? (
             <Text>Correct</Text>
           ) : (
             <Text>Try again</Text>
@@ -178,7 +226,10 @@ export default function Game({ route, navigation }: GameScreenProps) {
         {guessResult === 'winner' ? (
           <>
             <Text>Winner</Text>{' '}
-            <TouchableOpacity style={styles.button} onPress={handlePlayAgain}>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={handlePlayAgain}
+            >
               <Text>Play again</Text>
             </TouchableOpacity>
           </>
