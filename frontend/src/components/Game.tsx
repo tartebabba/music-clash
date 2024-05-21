@@ -12,8 +12,6 @@ export default function Game({ route, navigation }: GameScreenProps) {
   const { artists: items } = route.params;
   const [shuffledItems, setShuffledItems] = useState<string[]>([]);
   const [groups, setGroups] = useState<string[][]>([]);
-  
-  console.log(items);
 
   const gameItems = [...items[0].tracks, ...items[1].tracks, ...items[2].tracks, ...items[3].tracks];
 

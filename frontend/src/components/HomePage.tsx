@@ -48,19 +48,15 @@ export default function HomePage({ navigation }: Props) {
                   headers: {
                     Authorization: `Bearer ${access_token}`,
                   },
-                  params: {
-                    market: 'GB', // Make sure to include the market parameter
-                  },
                 }
               )
               .then(({ data }) => {
                 const artistTracks = [];
 
-                console.log(data)
                 for (let j = 0; j < 4; j++) {
                   artistTracks.push(data.tracks[j].name);
                 }
-                
+
                 const artistName = data.tracks[0].artists[0].name
 
                 const artistObj = {
