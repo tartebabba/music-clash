@@ -1,0 +1,55 @@
+{
+    "getGames":{
+        "description": "serves an array of all games",
+        "exampleResponse": [
+                {
+                    "date": "2024-05-20",
+                    "id": 1
+                },
+                {
+                    "date": "2024-05-19",
+                    "id": 2
+                }
+            ]
+    },
+    "getGameDetails":{
+        "description": "serves an array of each game, with details of artists and songs",
+        "exampleResponse": [
+                {
+                    "id": 1,   
+                    "game_id": 34,
+                    "artist": "Drake",
+                    "song_1": "Family Matters",
+                    "song_2": "In My Feelings",
+                    "song_3": "Hotline Bling",
+                    "song_4": "Best I Ever Had"
+                },
+                {
+                    "id": 2,   
+                    "game_id": 34,
+                    "artist": "Taylor Swift",
+                    "song_1": "Love Story",
+                    "song_2": "Shake It Off",
+                    "song_3": "Blank Space",
+                    "song_4": "You Belong With Me"
+                }
+            ]
+    },
+    "createGame":{
+        "description": "inserts a new game into games table, then uses game_id to insert the artists & songs provided in postObject into game_details table",
+        "examplePostObject": [{
+            "artist": "Radiohead",
+            "song_1": "Jigsaw Falling into Place",
+            "song_2": "Weird Fishes",
+            "song_3": "Creep",
+            "song_4": "Pyramid Song"
+          },
+          {
+            "artist": "Silk Sonic",
+            "song_1": "Leave the Door Open",
+            "song_2": "777",
+            "song_3": "Love's Train",
+            "song_4": "Skate"
+          }]
+    }
+}
