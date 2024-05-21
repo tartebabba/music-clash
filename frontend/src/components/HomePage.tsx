@@ -1,40 +1,91 @@
-import { Pressable, Text, TouchableOpacity, View, StyleSheet } from "react-native";
-import { useNavigation } from "@react-navigation/native";
-import { Props } from "./types";
+import { useState, useEffect } from 'react';
+import { TouchableOpacity, Text, View, StyleSheet } from 'react-native';
+import { Props } from './types';
+import axios from 'axios';
 
-export default function HomePage({navigation}: Props) {
-    const styles = StyleSheet.create({
-        title: {
-          fontSize: 40,
-        },
-        button: {
-            backgroundColor: '#000',
-            color: '#fff'
-        },
-        container: {
-              flex: 1,
-              backgroundColor: '#fff',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }
-    });
+import * as WebBrowser from 'expo-web-browser';
+import { makeRedirectUri, useAuthRequest } from 'expo-auth-session';
 
-    function handlePress() {
-        navigation.navigate('Game')
+WebBrowser.maybeCompleteAuthSession();
+
+const discovery = {
+  authorizationEndpoint: 'https://accounts.spotify.com/authorize',
+  tokenEndpoint: 'https://accounts.spotify.com/api/token',
+};
+
+export default function HomePage({ navigation }: Props) {
+  const [request, response, promptAsync] = useAuthRequest(
+    {
+      clientId: 'e9cd46ff618640158846ea3d309d9c7d',
+      scopes: ['user-read-email', 'user-read-private', 'user-top-read'],
+      usePKCE: false,
+      redirectUri: makeRedirectUri(),
+      responseType: 'token',
+    },
+    discovery
+  );
+
+  const [token, setToken] = useState('');
+
+  useEffect(() => {
+    if (response?.type === 'success') {
+      const { access_token } = response.params;
+      setToken(access_token);
+      navigation.navigate('Game');
+      axios
+        .get('https://api.spotify.com/v1/me/top/artists', {
+          headers: {
+            Authorization: `Bearer ${access_token}`,
+          },
+        })
+        .then(({ data }) => {
+          console.log(data);
+        });
     }
+  }, [response]);
 
-    return (
-        <View style={styles.container}>
-            <Text style={styles.title}>Music Clash</Text>
-            <TouchableOpacity onPress={handlePress}>
-            <Text style={styles.button}>Play game</Text>
-            </TouchableOpacity>
-            <TouchableOpacity>
-            <Text style={styles.button}>Login</Text>
-            </TouchableOpacity>
-            <TouchableOpacity>
-            <Text style={styles.button}>Play with Spotify</Text>
-            </TouchableOpacity>
-        </View>
-    )
+  const styles = StyleSheet.create({
+    title: {
+      fontSize: 40,
+    },
+    button: {
+      backgroundColor: 'lightgrey',
+      padding: 10,
+      margin: 10,
+    },
+    container: {
+      flex: 1,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+  });
+
+  function handleGamePress() {
+    navigation.navigate('Game');
+  }
+
+  function handleLoginPress() {
+    navigation.navigate('Login');
+  }
+
+  function handleSpotifyPress() {
+    promptAsync();
+  }
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>Music Clash</Text>
+      <TouchableOpacity style={styles.button} onPress={handleGamePress}>
+        <Text style={{ color: '#000' }}>Play game</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.button} onPress={handleLoginPress}>
+        <Text style={{ color: '#000' }}>Login</Text>
+      </TouchableOpacity>
+      {token === '' ? (
+        <TouchableOpacity style={styles.button} onPress={handleSpotifyPress}>
+          <Text style={{ color: '#000' }}>Play with Spotify</Text>
+        </TouchableOpacity>
+      ) : null}
+    </View>
+  );
 }
