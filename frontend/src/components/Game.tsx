@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Text,
   View,
@@ -9,7 +9,7 @@ import {
 import { Props } from './types';
 
 export default function Game({ route, navigation }: Props) {
-  console.log(route.params.artists);
+  // console.log(route.params.artists);
   const styles = StyleSheet.create({
     container: {
       flex: 1,
@@ -62,24 +62,8 @@ export default function Game({ route, navigation }: Props) {
     },
   });
 
-  const items = [
-    '1',
-    '2',
-    '3',
-    '4',
-    '5',
-    '6',
-    '7',
-    '8',
-    '9',
-    '10',
-    '11',
-    '12',
-    '13',
-    '14',
-    '15',
-    '16',
-  ];
+  const items = route.params.artists;
+
   const [selected, setSelected] = useState<string[]>([]);
   const [foundGroups, setFoundGroups] = useState<string[]>([]);
   const [guessResult, setGuessResult] = useState('');
@@ -95,12 +79,13 @@ export default function Game({ route, navigation }: Props) {
       setSelected([...selected, item]);
     }
   }
-
+  
+  
   const groups = [
-    ['1', '4', '6', '9'],
-    ['2', '3', '7', '8'],
-    ['5', '10', '11', '12'],
-    ['13', '14', '15', '16'],
+    items.slice(0, 4), 
+    items.slice(4, 8),
+    items.slice(8, 12),
+    items.slice(12, 16),   
   ];
 
   function handleSubmit() {

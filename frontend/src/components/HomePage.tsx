@@ -26,7 +26,6 @@ export default function HomePage({ navigation }: Props) {
   );
 
   const [token, setToken] = useState('');
-  const [favArtists, setFavArtists] = useState<string[]>([]);
 
   useEffect(() => {
     if (response?.type === 'success') {
@@ -39,9 +38,27 @@ export default function HomePage({ navigation }: Props) {
           },
         })
         .then(({ data }) => {
-          setFavArtists(data.items);
-          navigation.navigate('Game', { artists: favArtists });
-        });
+          const gameTracks: number[] = [];
+
+          for (let i = 0; i < 4; i++) {
+            axios
+            .get(`https://api.spotify.com/v1/artists/${data.items[i].id}/top-tracks`, {
+              headers: {
+                Authorization: `Bearer ${access_token}`,
+              }
+            })
+            .then(({ data }) => {
+              for (let j = 0; j < 4; j++) {              
+                gameTracks.push(data.tracks[j].name)
+
+                if (gameTracks.length === 16) {
+                  navigation.navigate('Game', { screen: 'Game', params:  { artists: gameTracks }});
+                  console.log(gameTracks);
+                } 
+              }
+            })
+          }
+        })
     }
   }, [response]);
 
