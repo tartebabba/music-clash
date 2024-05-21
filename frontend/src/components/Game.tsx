@@ -63,8 +63,6 @@ export default function Game({ route, navigation }: GameScreenProps) {
     },
   });
 
-  // const items = route.params.artists;
-
   const [selected, setSelected] = useState<string[]>([]);
   const [foundGroups, setFoundGroups] = useState<string[]>([]);
   const [guessResult, setGuessResult] = useState('');
