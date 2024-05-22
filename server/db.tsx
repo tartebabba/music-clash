@@ -23,7 +23,7 @@ export async function postGame(postObject: Game) {
   console.log(data![0].id);
 }
 
-interface GameDetails {
+interface ArtistSongs {
   artist: string;
   song_1: string;
   song_2: string;
@@ -31,8 +31,8 @@ interface GameDetails {
   song_4: string;
 }
 
-// export async function postMultipleGameDetails(
-//   postObject: GameDetails[]
+// export async function postMultipleArtistSongs(
+//   postObject: ArtistSongs[]
 // ) {
 //   const data = await supabase
 //     .from('game_details')
@@ -42,7 +42,7 @@ interface GameDetails {
 // }
 
 export async function createGame(
-  postObject: GameDetails[]
+  postObject: ArtistSongs[]
 ) {
   try {
     let currentDate = new Date().toJSON();
@@ -137,6 +137,44 @@ export async function insertUserGame(userGame: UserGame) {
     throw error;
   }
 }
+
+export async function insertArtistSongsCatalog(artistSongs:ArtistSongs) {
+  const songsArray = [artistSongs.song_1, artistSongs.song_2, artistSongs.song_3, artistSongs.song_4]
+  songsArray.sort()
+  const { artist } = artistSongs;
+  
+  const artistSongsAlphabetically = {artist: artist, song_1: songsArray[0], song_2: songsArray[1], song_3: songsArray[2], song_4: songsArray[3]}
+  try {
+    const { data, error } = await supabase
+      .from('artist_songs_catalog')
+      .select(`id, artist`)
+      .eq('artist', `${artist}`);
+     
+    const artistExists = data!.length ? true : false   
+    if(artistExists){
+      const { error } = await supabase
+      .from('artist_songs_catalog')
+      .update({ artist: `${artist}` })
+      .eq('id', data![0].id)
+    }
+    else {    
+      const { error } = await supabase
+      .from('artist_songs_catalog')
+      .insert(artistSongsAlphabetically)
+      .select();
+      if (error) {
+        console.log(error);
+        throw new Error(
+          `Error inserting into artist_songs_catalog: ${error.message}`
+        );
+      }
+    }
+  } catch (error) {
+      console.error('Error in insertArtistSongsCatalog:', error);
+      throw error;
+  }
+}
+
 
 // table top 100 artists top 10 (artist_songs_combinations)
 // get songs by artist function
