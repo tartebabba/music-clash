@@ -5,10 +5,11 @@ export async function getGames() {
   console.log(data);
 }
 
-export async function getGameDetails() {
+export async function getGameDetails(id: Number) {
   const { data } = await supabase
     .from('game_details')
-    .select();
+    .select()
+    .eq('game_id', id);
   console.log(data);
 }
 
