@@ -128,6 +128,10 @@ export default function HomePage({ navigation }: Props) {
     promptAsync();
   }
 
+  function handleTestPress() {
+    navigation.navigate('TestingPage');
+  }
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Music Clash</Text>
@@ -153,6 +157,9 @@ export default function HomePage({ navigation }: Props) {
           </Text>
         </TouchableOpacity>
       ) : null}
+      <TouchableOpacity onPress={handleTestPress}>
+        <Text>TestingPage</Text>
+      </TouchableOpacity>
     </View>
   );
 }
