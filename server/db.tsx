@@ -1,12 +1,5 @@
 import supabase from './supabase-setup';
 
-// const { createClient } = require("@supabase/supabase-js")
-
-// const supabaseUrl = process.env.SUPABASE_URL
-// const supabaseKey = process.env.SUPABASE_KEY
-
-// const supabase = createClient(supabaseUrl, supabaseKey);
-
 export async function getGames() {
   const { data } = await supabase.from('games').select();
   console.log(data);
