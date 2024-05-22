@@ -13,6 +13,7 @@ import {
   makeRedirectUri,
   useAuthRequest,
 } from 'expo-auth-session';
+import { createGame } from '../../../server/db';
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -87,9 +88,13 @@ export default function HomePage({ navigation }: Props) {
                   song_4: artistTracks[3],
                 };
 
+                
+
                 gameTracks.push(artistObj);
 
                 if (gameTracks.length === 4) {
+                  createGame(gameTracks);
+
                   navigation.navigate('Game', {
                     artists: gameTracks,
                   });
