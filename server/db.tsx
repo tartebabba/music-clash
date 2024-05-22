@@ -1,8 +1,7 @@
 const { createClient } = require("@supabase/supabase-js")
 
 const supabaseUrl = "URL"
-const supabaseKey = "key"
-
+const supabaseKey = 	"key"
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 export async function getGames() {
