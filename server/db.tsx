@@ -1,8 +1,4 @@
-const { createClient } = require("@supabase/supabase-js")
-
-const supabaseUrl = "URL"
-const supabaseKey = 	"key"
-const supabase = createClient(supabaseUrl, supabaseKey);
+import supabase from './supabase-setup';
 
 export async function getGames() {
   const { data } = await supabase.from('games').select();
@@ -122,28 +118,26 @@ interface UserGame {
   completed_row_2: boolean;
 }
 
-export async function insertUserGame(userGame:UserGame) {
+export async function insertUserGame(userGame: UserGame) {
   try {
     let currentDate = new Date().toJSON();
-    userGame = {date: currentDate, ...userGame}
-    const {data, error} = await supabase
-    .from('user_games')
-    .insert(userGame)
-    .select()
+    userGame = { date: currentDate, ...userGame };
+    const { data, error } = await supabase
+      .from('user_games')
+      .insert(userGame)
+      .select();
     if (error) {
       console.log(error);
       throw new Error(
         `Error inserting user-game: ${error.message}`
       );
     }
-  }
-  catch(error){
+  } catch (error) {
     console.error('Error in insertUserGame:', error);
     throw error;
   }
 }
 
-
 // table top 100 artists top 10 (artist_songs_combinations)
 // get songs by artist function
-  // prevent duplicate artist/game data 
+// prevent duplicate artist/game data
