@@ -5,12 +5,12 @@ export async function getGames() {
   console.log(data);
 }
 
-export async function getGameDetails(id: Number) {
+export async function getGameDetails(gameID: Number) {
   const { data } = await supabase
     .from('game_details')
     .select()
-    .eq('game_id', id);
-  console.log(data);
+    .eq('game_id', gameID);
+  return data;
 }
 
 interface Game {

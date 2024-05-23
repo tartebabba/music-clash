@@ -7,6 +7,8 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { GameScreenProps } from './types';
+import axios from 'axios';
+import { getGameDetails } from '../../../server/db';
 
 export default function Game({
   route,
@@ -18,79 +20,63 @@ export default function Game({
   >([]);
   const [groups, setGroups] = useState<string[][]>([]);
 
-  const gameItems = items.flatMap((item) => [
-    item.song_1,
-    item.song_2,
-    item.song_3,
-    item.song_4,
-  ]);
-
   useEffect(() => {
-    setGroups(
-      items.map((item) => [
-        item.song_1,
-        item.song_2,
-        item.song_3,
-        item.song_4,
-      ])
-    );
+    if (items.length === 0) {
+      const gameID = Math.floor(Math.random() * 10) + 1;
+      getGameDetails(gameID).then(
+        (randomDefaultGameItems) => {
+          console.log(randomDefaultGameItems);
 
-    setShuffledItems([
-      ...gameItems.sort(() => 0.5 - Math.random()),
-    ]);
-  }, []);
+          if (
+            randomDefaultGameItems?.length === 0 ||
+            !randomDefaultGameItems
+          ) {
+            console.log('Failed to fetch game details!');
+            return;
+          }
+          setGroups(
+            randomDefaultGameItems.map((item) => [
+              item.song_1,
+              item.song_2,
+              item.song_3,
+              item.song_4,
+            ])
+          );
 
-  const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-    },
-    centered: {
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-    cardContainer: {
-      width: 100,
-      height: 100,
-      margin: 5,
-    },
-    card: {
-      position: 'absolute',
-      width: '100%',
-      height: '100%',
-      backfaceVisibility: 'hidden',
-      justifyContent: 'center',
-      alignItems: 'center',
-    },
-    cardButton: {
-      backgroundColor: 'lightblue',
-      width: '100%',
-      height: '100%',
-      position: 'relative',
-    },
-    selectedCard: {
-      backgroundColor: 'lightgreen',
-      width: '100%',
-      height: '100%',
-      position: 'relative',
-    },
-    foundCard: {
-      width: '100%',
-      height: '100%',
-      position: 'relative',
-    },
-    button: {
-      backgroundColor: 'lightgrey',
-      padding: 10,
-      margin: 10,
-    },
-    disableButton: {
-      backgroundColor: 'darkgrey',
-      padding: 10,
-      margin: 10,
-    },
-  });
+          setShuffledItems([
+            ...randomDefaultGameItems
+              .flatMap((item) => [
+                item.song_1,
+                item.song_2,
+                item.song_3,
+                item.song_4,
+              ])
+              .sort(() => 0.5 - Math.random()),
+          ]);
+        }
+      );
+    } else {
+      setGroups(
+        items.map((item) => [
+          item.song_1,
+          item.song_2,
+          item.song_3,
+          item.song_4,
+        ])
+      );
+
+      setShuffledItems([
+        ...items
+          .flatMap((item) => [
+            item.song_1,
+            item.song_2,
+            item.song_3,
+            item.song_4,
+          ])
+          .sort(() => 0.5 - Math.random()),
+      ]);
+    }
+  }, [items]);
 
   const [selected, setSelected] = useState<string[]>([]);
   const [foundGroups, setFoundGroups] = useState<string[]>(
@@ -128,7 +114,7 @@ export default function Game({
       }
     }
     setSelected([]);
-    
+
     if (correct === false) {
       setLives(lives - 1);
     }
@@ -172,7 +158,9 @@ export default function Game({
                       ? styles.selectedCard
                       : styles.cardButton
                 }
-                disabled={foundGroups.includes(item) || lives === 0}
+                disabled={
+                  foundGroups.includes(item) || lives === 0
+                }
               >
                 <View style={styles.card}>
                   <Text>{item}</Text>
@@ -212,9 +200,8 @@ export default function Game({
             </TouchableOpacity>
           </>
         ) : null}
-        {lives === 0 ? 
-        (
-        <>
+        {lives === 0 ? (
+          <>
             <Text>You lose</Text>{' '}
             <TouchableOpacity
               style={styles.button}
@@ -222,8 +209,61 @@ export default function Game({
             >
               <Text>Play again</Text>
             </TouchableOpacity>
-          </>) : null}
+          </>
+        ) : null}
       </View>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  centered: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  cardContainer: {
+    width: 100,
+    height: 100,
+    margin: 5,
+  },
+  card: {
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+    backfaceVisibility: 'hidden',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  cardButton: {
+    backgroundColor: 'lightblue',
+    width: '100%',
+    height: '100%',
+    position: 'relative',
+  },
+  selectedCard: {
+    backgroundColor: 'lightgreen',
+    width: '100%',
+    height: '100%',
+    position: 'relative',
+  },
+  foundCard: {
+    width: '100%',
+    height: '100%',
+    position: 'relative',
+  },
+  button: {
+    backgroundColor: 'lightgrey',
+    padding: 10,
+    margin: 10,
+  },
+  disableButton: {
+    backgroundColor: 'darkgrey',
+    padding: 10,
+    margin: 10,
+  },
+});
