@@ -12,9 +12,19 @@ type RootStackParamList = {
   };
   Login: undefined;
   TestingPage: undefined;
+  Multiplayer: {
+    artists: {
+      artist: string;
+      song_1: string;
+      song_2: string;
+      song_3: string;
+      song_4: string;
+    }[];
+  };
 };
 type Props = NativeStackScreenProps<RootStackParamList>;
 type GameScreenProps = NativeStackScreenProps<RootStackParamList, 'Game'>;
+type MultiplayerScreenProps = NativeStackScreenProps<RootStackParamList, 'Game'>;
 
 
-export { RootStackParamList, Props, GameScreenProps };
+export { RootStackParamList, Props, GameScreenProps, MultiplayerScreenProps };
