@@ -1,8 +1,13 @@
 import supabase from './supabase-setup';
 
 export async function getGames() {
-  const { data } = await supabase.from('games').select();
-  console.log(data);
+  try {
+    const { data } = await supabase.from('games').select();
+    return data
+  } catch (error) {
+    console.error("Error fetching games:", error);
+  }
+
 }
 
 export async function getGameDetails(gameID: Number) {
