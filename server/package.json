@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "supabase-setup.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest backend.test.ts --runInBand"
   },
   "keywords": [],
   "author": "",
