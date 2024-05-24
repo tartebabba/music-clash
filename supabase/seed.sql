@@ -1,44 +1,113 @@
- -- Insert some sample data into the table
- INSERT INTO games (date) VALUES ('2024-05-20');
- INSERT INTO games (date) VALUES ('2024-05-19');
- INSERT INTO games (date) VALUES ('2024-05-18');
-
+-- Insert some sample data into the table
+INSERT INTO games (date) VALUES
+('2024-05-20'),
+('2024-05-19'),
+('2024-05-18'),
+('2024-05-17'),
+('2024-05-16'),
+('2024-05-15'),
+('2024-05-14'),
+('2024-05-13'),
+('2024-05-12'),
+('2024-05-11'),
+('2024-05-10'),
+('2024-05-09'),
+('2024-05-08'),
+('2024-05-07'),
+('2024-05-06'),
+('2024-05-05'),
+('2024-05-04'),
+('2024-05-03'),
+('2024-05-02'),
+('2024-05-01');
 -- Insert some sample data into the table
 insert into
   game_details (game_id, artist, song_1, song_2, song_3, song_4)
 values
-  (
-    1,
-    'Drake',
-    'Family Matters',
-    'In My Feelings',
-    'Hotline Bling',
-    'Best I Ever Had'
-  ),
-  (
-    1,
-    'Taylor Swift',
-    'Love Story',
-    'Shake It Off',
-    'Blank Space',
-    'You Belong With Me'
-  ),
-  (
-    1,
-    'Drake',
-    'One Dance',
-    'Started From the Bottom',
-    'Take Care',
-    'Nice For What'
-  );
-
-INSERT INTO users (name, username, email, password) 
+(1,'Taylor Swift','Anti-Hero','Blank Space','Love Story','Shake It Off'),
+(1,'Drake','God''s Plan','Hotline Bling','In My Feelings','One Dance'),
+(1,'The Weeknd','Blinding Lights','Save Your Tears','Starboy','The Hills'),
+(1,'Ed Sheeran','Bad Habits','Perfect','Shape of You','Thinking Out Loud'),
+(2,'Ariana Grande','7 rings','positions','Side to Side','thank u, next'),
+(2,'Justin Bieber','Love Yourself','Peaches','Sorry','STAY (with The Kid LAROI)'),
+(2,'Eminem','Godzilla (feat. Juice WRLD)','Lose Yourself','The Real Slim Shady','Without Me'),
+(2,'Post Malone','Circles','Rockstar (feat. 21 Savage)','Sunflower (with Swae Lee)','Wow.'),
+(3,'Kanye West','Gold Digger','Heartless','Power','Stronger'),
+(3,'The Beatles','Come Together','Here Comes The Sun','Let It Be','Yesterday'),
+(3,'Michael Jackson','Beat It','Billie Jean','Smooth Criminal','Thriller'),
+(3,'Queen','Another One Bites The Dust','Bohemian Rhapsody','Don''t Stop Me Now','Under Pressure'),
+(4,'Bruno Mars','Just the Way You Are','Locked out of Heaven','That''s What I Like','When I Was Your Man'),
+(4,'Coldplay','A Sky Full of Stars','The Scientist','Viva La Vida','Yellow'),
+(4,'Dua Lipa','Don''t Start Now','Levitating (feat. DaBaby)','New Rules','One Kiss'),
+(4,'Kendrick Lamar','All The Stars (with SZA)','HUMBLE','LOVE. FEAT. ZACARI','Money Trees'),
+(5,'Maroon 5','Maps','Memories','Payphone','Sugar'),
+(5,'Sam Smith','I''m Not The Only One','Stay With Me','Too Good At Goodbyes','Unholy (feat. Kim Petras)'),
+(5,'Harry Styles','Adore You','As It Was','Sign of the Times','Watermelon Sugar'),
+(5,'Adele','Easy On Me','Rolling in the Deep','Set Fire to the Rain','Someone Like You'),
+(6,'Taylor Swift','Anti-Hero','Blank Space','Love Story','Shake It Off'),
+(6,'Drake','God''s Plan','Hotline Bling','In My Feelings','One Dance'),
+(6,'The Weeknd','Blinding Lights','Save Your Tears','Starboy','The Hills'),
+(6,'Ed Sheeran','Bad Habits','Perfect','Shape of You','Thinking Out Loud'),
+(7,'Ariana Grande','7 rings','positions','Side to Side','thank u, next'),
+(7,'Justin Bieber','Love Yourself','Peaches','Sorry','STAY (with The Kid LAROI)'),
+(7,'Eminem','Godzilla (feat. Juice WRLD)','Lose Yourself','The Real Slim Shady','Without Me'),
+(7,'Post Malone','Circles','Rockstar (feat. 21 Savage)','Sunflower (with Swae Lee)','Wow.'),
+(8,'Kanye West','Gold Digger','Heartless','Power','Stronger'),
+(8,'The Beatles','Come Together','Here Comes The Sun','Let It Be','Yesterday'),
+(8,'Michael Jackson','Beat It','Billie Jean','Smooth Criminal','Thriller'),
+(8,'Queen','Another One Bites The Dust','Bohemian Rhapsody','Don''t Stop Me Now','Under Pressure'),
+(9,'Bruno Mars','Just the Way You Are','Locked out of Heaven','That''s What I Like','When I Was Your Man'),
+(9,'Coldplay','A Sky Full of Stars','The Scientist','Viva La Vida','Yellow'),
+(9,'Dua Lipa','Don''t Start Now','Levitating (feat. DaBaby)','New Rules','One Kiss'),
+(9,'Kendrick Lamar','All The Stars (with SZA)','HUMBLE','LOVE. FEAT. ZACARI','Money Trees'),
+(10,'Maroon 5','Maps','Memories','Payphone','Sugar'),
+(10,'Sam Smith','I''m Not The Only One','Stay With Me','Too Good At Goodbyes','Unholy (feat. Kim Petras)'),
+(10,'Harry Styles','Adore You','As It Was','Sign of the Times','Watermelon Sugar'),
+(10,'Adele','Easy On Me','Rolling in the Deep','Set Fire to the Rain','Someone Like You'),
+(11,'Taylor Swift','Anti-Hero','Blank Space','Love Story','Shake It Off'),
+(11,'Drake','God''s Plan','Hotline Bling','In My Feelings','One Dance'),
+(11,'The Weeknd','Blinding Lights','Save Your Tears','Starboy','The Hills'),
+(11,'Ed Sheeran','Bad Habits','Perfect','Shape of You','Thinking Out Loud'),
+(12,'Ariana Grande','7 rings','positions','Side to Side','thank u, next'),
+(12,'Justin Bieber','Love Yourself','Peaches','Sorry','STAY (with The Kid LAROI)'),
+(12,'Eminem','Godzilla (feat. Juice WRLD)','Lose Yourself','The Real Slim Shady','Without Me'),
+(12,'Post Malone','Circles','Rockstar (feat. 21 Savage)','Sunflower (with Swae Lee)','Wow.'),
+(13,'Kanye West','Gold Digger','Heartless','Power','Stronger'),
+(13,'The Beatles','Come Together','Here Comes The Sun','Let It Be','Yesterday'),
+(13,'Michael Jackson','Beat It','Billie Jean','Smooth Criminal','Thriller'),
+(13,'Queen','Another One Bites The Dust','Bohemian Rhapsody','Don''t Stop Me Now','Under Pressure'),
+(14,'Bruno Mars','Just the Way You Are','Locked out of Heaven','That''s What I Like','When I Was Your Man'),
+(14,'Coldplay','A Sky Full of Stars','The Scientist','Viva La Vida','Yellow'),
+(14,'Dua Lipa','Don''t Start Now','Levitating (feat. DaBaby)','New Rules','One Kiss'),
+(14,'Kendrick Lamar','All The Stars (with SZA)','HUMBLE','LOVE. FEAT. ZACARI','Money Trees'),
+(15,'Maroon 5','Maps','Memories','Payphone','Sugar'),
+(15,'Sam Smith','I''m Not The Only One','Stay With Me','Too Good At Goodbyes','Unholy (feat. Kim Petras)'),
+(15,'Harry Styles','Adore You','As It Was','Sign of the Times','Watermelon Sugar'),
+(15,'Adele','Easy On Me','Rolling in the Deep','Set Fire to the Rain','Someone Like You'),
+(16,'Taylor Swift','Anti-Hero','Blank Space','Love Story','Shake It Off'),
+(16,'Drake','God''s Plan','Hotline Bling','In My Feelings','One Dance'),
+(16,'The Weeknd','Blinding Lights','Save Your Tears','Starboy','The Hills'),
+(16,'Ed Sheeran','Bad Habits','Perfect','Shape of You','Thinking Out Loud'),
+(17,'Ariana Grande','7 rings','positions','Side to Side','thank u, next'),
+(17,'Justin Bieber','Love Yourself','Peaches','Sorry','STAY (with The Kid LAROI)'),
+(17,'Eminem','Godzilla (feat. Juice WRLD)','Lose Yourself','The Real Slim Shady','Without Me'),
+(17,'Post Malone','Circles','Rockstar (feat. 21 Savage)','Sunflower (with Swae Lee)','Wow.'),
+(18,'Kanye West','Gold Digger','Heartless','Power','Stronger'),
+(18,'The Beatles','Come Together','Here Comes The Sun','Let It Be','Yesterday'),
+(18,'Michael Jackson','Beat It','Billie Jean','Smooth Criminal','Thriller'),
+(18,'Queen','Another One Bites The Dust','Bohemian Rhapsody','Don''t Stop Me Now','Under Pressure'),
+(19,'Bruno Mars','Just the Way You Are','Locked out of Heaven','That''s What I Like','When I Was Your Man'),
+(19,'Coldplay','A Sky Full of Stars','The Scientist','Viva La Vida','Yellow'),
+(19,'Dua Lipa','Don''t Start Now','Levitating (feat. DaBaby)','New Rules','One Kiss'),
+(19,'Kendrick Lamar','All The Stars (with SZA)','HUMBLE','LOVE. FEAT. ZACARI','Money Trees'),
+(20,'Maroon 5','Maps','Memories','Payphone','Sugar'),
+(20,'Sam Smith','I''m Not The Only One','Stay With Me','Too Good At Goodbyes','Unholy (feat. Kim Petras)'),
+(20,'Harry Styles','Adore You','As It Was','Sign of the Times','Watermelon Sugar'),
+(20,'Adele','Easy On Me','Rolling in the Deep','Set Fire to the Rain','Someone Like You');
+INSERT INTO users (name, username, email, password)
 VALUES ('John Doe', 'johndoe', 'john.doe@example.com', 'password123');
-
-INSERT INTO user_games (user_id, game_id, date, won, active, completed_row_1, completed_row_2) 
+INSERT INTO user_games (user_id, game_id, date, won, active, completed_row_1, completed_row_2)
 VALUES (1, 2, '2024-05-20', TRUE, FALSE, TRUE, TRUE);
-
-
 insert into
   artist_songs_catalog (artist, song_1, song_2, song_3, song_4)
 values
