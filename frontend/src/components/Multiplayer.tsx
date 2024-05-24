@@ -11,18 +11,79 @@ import {
 import { Picker } from "@react-native-picker/picker";
 
 import io, { Socket } from "socket.io-client";
+import { MultiplayerScreenProps } from "./types";
+import { getGameDetails } from "../../../server/db";
 
-const socket: Socket = io("http://localhost:4000");
+const socket: Socket = io("http://localhost:4001");
 
-export default function Multiplayer() {
-  const gameItems = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16];
-
-  const groups = [
-    [1, 2, 3, 4],
-    [5, 6, 7, 8],
-    [9, 14, 11, 16],
-    [13, 10, 15, 12],
-  ];
+export default function Multiplayer({
+    route,
+    navigation,
+  }: MultiplayerScreenProps) {
+    const { artists } = route.params;
+    const [items, setItems] = useState(artists)
+    const [shuffledItems, setShuffledItems] = useState<
+      string[]
+    >([]);
+    const [groups, setGroups] = useState<string[][]>([]);
+  
+    useEffect(() => {
+      if (items.length === 0) {
+        let gameID = Math.floor(Math.random() * 10) + 1;
+        getGameDetails(gameID).then(
+          (randomDefaultGameItems) => {
+            console.log(randomDefaultGameItems);
+  
+            if (
+              randomDefaultGameItems?.length === 0 ||
+              !randomDefaultGameItems
+            ) {
+              console.log('Failed to fetch game details!');
+              return;
+            }
+            setGroups(
+              randomDefaultGameItems.map((item) => [
+                item.song_1,
+                item.song_2,
+                item.song_3,
+                item.song_4,
+              ])
+            );
+  
+            setShuffledItems([
+              ...randomDefaultGameItems
+                .flatMap((item) => [
+                  item.song_1,
+                  item.song_2,
+                  item.song_3,
+                  item.song_4,
+                ])
+                .sort(() => 0.5 - Math.random()),
+            ]);
+          }
+        );
+      } else {
+        setGroups(
+          items.map((item) => [
+            item.song_1,
+            item.song_2,
+            item.song_3,
+            item.song_4,
+          ])
+        );
+  
+        setShuffledItems([
+          ...items
+            .flatMap((item) => [
+              item.song_1,
+              item.song_2,
+              item.song_3,
+              item.song_4,
+            ])
+            .sort(() => 0.5 - Math.random()),
+        ]);
+      }
+    }, [items]);
 
   const styles = StyleSheet.create({
     container: {
@@ -110,8 +171,8 @@ export default function Multiplayer() {
     player2: number;
   };
 
-  const [selected, setSelected] = useState<number[]>([]);
-  const [foundGroups, setFoundGroups] = useState<number[]>([]);
+  const [selected, setSelected] = useState<string[]>([]);
+  const [foundGroups, setFoundGroups] = useState<string[]>([]);
   const [guessResult, setGuessResult] = useState<string>("");
   const [lives, setLives] = useState<number>(2);
   const [room, setRoom] = useState<string>("");
@@ -208,7 +269,7 @@ export default function Multiplayer() {
     };
   }, [room]);
 
-  function handleClick(item: number) {
+  function handleClick(item: string) {
     if (selected.includes(item)) {
       setSelected(
         selected.filter((elem) => {
@@ -259,6 +320,7 @@ export default function Multiplayer() {
   }
 
   function resetGameState() {
+    setItems([])
     setFoundGroups([]);
     setGuessResult("");
     setLives(2);
@@ -271,7 +333,7 @@ export default function Multiplayer() {
     });
   }
 
-  function getBackgroundColor(item: number) {
+  function getBackgroundColor(item: string) {
     const colours = ["red", "blue", "purple", "green"];
     const index = foundGroups.indexOf(item);
     const groupIndex = Math.floor(index / 4);
@@ -386,7 +448,7 @@ export default function Multiplayer() {
           <View style={styles.boardContainer}>
             <Text>You have {lives} lives remaining</Text>
             <FlatList
-              data={gameItems}
+              data={shuffledItems}
               numColumns={4}
               renderItem={({ item }) => (
                 <View style={styles.cardContainer}>
@@ -464,13 +526,13 @@ export default function Multiplayer() {
               <Text>Opponent has {opponentEvents.lives} lives remaining</Text>
             )}
             <FlatList
-              data={gameItems}
+              data={shuffledItems}
               numColumns={4}
               renderItem={({ item, index }) => (
                 <View style={styles.cardContainer}>
                   <Pressable
                     style={
-                      item <= opponentEvents.found_groups.length
+                      index <= opponentEvents.found_groups.length
                         ? [
                             styles.foundCard,
                             {

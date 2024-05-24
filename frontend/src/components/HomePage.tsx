@@ -125,6 +125,10 @@ export default function HomePage({ navigation }: Props) {
     navigation.navigate('Game', { artists: [] });
   }
 
+  function handleMultilayerPress() {
+    navigation.navigate('Multiplayer', { artists: [] });
+  }
+
   function handleLoginPress() {
     navigation.navigate('Login');
   }
@@ -165,6 +169,11 @@ export default function HomePage({ navigation }: Props) {
       <TouchableOpacity onPress={handleTestPress}>
         <Text>TestingPage</Text>
       </TouchableOpacity>
+
+      <TouchableOpacity onPress={handleMultilayerPress}>
+        <Text>Multiplayer</Text>
+      </TouchableOpacity>
+
     </View>
   );
 }

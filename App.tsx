@@ -1,12 +1,11 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
-import HomePage from './frontend/src/components/HomePage';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { RootStackParamList } from './frontend/src/components/types';
+import HomePage from './frontend/src/components/HomePage';
 import Game from './frontend/src/components/Game';
 import Login from './frontend/src/components/LoginPage';
-import { RootStackParamList } from './frontend/src/components/types';
 import TestingPage from './frontend/src/components/TestingPage';
+import Multiplayer from './frontend/src/components/Multiplayer';
 
 const Stack =
   createNativeStackNavigator<RootStackParamList>();
@@ -27,6 +26,7 @@ export default function App() {
             name="TestingPage"
             component={TestingPage}
           />
+          <Stack.Screen name="Multiplayer" component={Multiplayer} />
         </Stack.Navigator>
       </NavigationContainer>
     </>

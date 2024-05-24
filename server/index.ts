@@ -6,12 +6,12 @@ const app = express();
 const server = http.createServer(app);
 const io = new socketIo(server, {
   cors: {
-    origin: "http://localhost:8081",
+    origin: "http://localhost:8082",
     methods: ["GET", "POST"],
   },
 });
 
-const port = 4000;
+const port = 4001;
 
 type Room  = {
     players: string[];
