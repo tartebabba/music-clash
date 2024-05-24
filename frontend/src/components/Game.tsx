@@ -7,14 +7,14 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { GameScreenProps } from './types';
-import axios from 'axios';
 import { getGameDetails } from '../../../server/db';
 
 export default function Game({
   route,
   navigation,
 }: GameScreenProps) {
-  const { artists: items } = route.params;
+  const { artists } = route.params;
+  const [items, setItems] = useState(artists)
   const [shuffledItems, setShuffledItems] = useState<
     string[]
   >([]);
@@ -22,7 +22,7 @@ export default function Game({
 
   useEffect(() => {
     if (items.length === 0) {
-      const gameID = Math.floor(Math.random() * 10) + 1;
+      let gameID = Math.floor(Math.random() * 10) + 1;
       getGameDetails(gameID).then(
         (randomDefaultGameItems) => {
           console.log(randomDefaultGameItems);
@@ -121,6 +121,7 @@ export default function Game({
   }
 
   function handlePlayAgain() {
+    setItems([])
     setFoundGroups([]);
     setGuessResult('');
     setLives(4);
