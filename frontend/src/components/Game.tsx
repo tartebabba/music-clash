@@ -192,7 +192,7 @@ export default function Game({
         ) : null}
         {guessResult === 'winner' ? (
           <>
-            <Text>Winner</Text>{' '}
+            <Text>Winner</Text>
             <TouchableOpacity
               style={styles.button}
               onPress={handlePlayAgain}
