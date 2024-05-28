@@ -7,6 +7,7 @@ import Login from './frontend/src/components/LoginPage';
 import TestingPage from './frontend/src/components/TestingPage';
 import Multiplayer from './frontend/src/components/Multiplayer';
 import { NativeWindStyleSheet } from 'nativewind';
+import moment from 'moment';
 
 NativeWindStyleSheet.setOutput({
   default: 'native',
@@ -16,6 +17,9 @@ const Stack =
   createNativeStackNavigator<RootStackParamList>();
 
 export default function App() {
+  const currentDate = moment(new Date()).format(
+    'MMM Do YYYY'
+  );
   return (
     <>
       <NavigationContainer>
@@ -23,7 +27,9 @@ export default function App() {
           <Stack.Screen
             name="HomePage"
             component={HomePage}
-            options={{ title: 'Welcome' }}
+            options={{
+              title: `Music Clash - ${currentDate}`,
+            }}
           />
           <Stack.Screen name="Game" component={Game} />
           <Stack.Screen name="Login" component={Login} />
@@ -31,7 +37,10 @@ export default function App() {
             name="TestingPage"
             component={TestingPage}
           />
-          <Stack.Screen name="Multiplayer" component={Multiplayer} />
+          <Stack.Screen
+            name="Multiplayer"
+            component={Multiplayer}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     </>
