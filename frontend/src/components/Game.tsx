@@ -21,14 +21,14 @@ export default function Game({
     string[]
   >([]);
   const [groups, setGroups] = useState<string[][]>([]);
+  const [gameType, setGameType] =
+    useState<string>('Spotify');
 
   useEffect(() => {
     if (items.length === 0) {
       let gameID = Math.floor(Math.random() * 10) + 1;
       getGameDetails(gameID).then(
         (randomDefaultGameItems) => {
-          console.log(randomDefaultGameItems);
-
           if (
             randomDefaultGameItems?.length === 0 ||
             !randomDefaultGameItems
@@ -55,6 +55,8 @@ export default function Game({
               ])
               .sort(() => 0.5 - Math.random()),
           ]);
+
+          setGameType('Vanilla');
         }
       );
     } else {
@@ -136,26 +138,32 @@ export default function Game({
     return colours[groupIndex];
   }
 
+  const isButtonDisabled = selected.length !== 4;
+
   return (
     <>
-      <View className="flex bg-white just border-2">
-        <View className="flex-2 self-center  border-2">
+      <View className="flex bg-white h-full">
+        <View>
           <Image
-            className="self-center"
-            source={require('../../../assets/music(64px).png')}
+            className="self-center m-2"
+            source={require('../../../assets/music(128px).png')}
           />
-          <Text className="text-lg text-bold">
+          <Text className="text-2xl font-bold text-center my-2">
             Welcome to Music Clash
           </Text>
+          <Text className=" text-bold text-center my-1 mb-2">
+            {gameType === 'Vanilla'
+              ? 'Group Four Hits From One Artist'
+              : 'Group Four Hits From One Artist From Your Music Library'}
+          </Text>
         </View>
-        <View className=" flex-4 ">
+        <View className="flex-2 p-2">
           <FlatList
             data={shuffledItems}
             numColumns={4}
             contentContainerStyle={{
               justifyContent: 'center',
               alignItems: 'center',
-              // flexGrow: 1,
             }}
             renderItem={({ item }) => (
               <View style={styles.cardContainer}>
@@ -181,7 +189,11 @@ export default function Game({
                 >
                   <View className="flex-1 justify-center">
                     <Text
-                      className={`font-bold text-center p-1 ${selected.includes(item) ? 'text-white' : 'text-black'}`}
+                      className={`font-bold text-center p-1 ${
+                        selected.includes(item)
+                          ? 'text-white'
+                          : 'text-black'
+                      }`}
                     >
                       {item}
                     </Text>
@@ -192,19 +204,21 @@ export default function Game({
             keyExtractor={(item) => item.toString()}
           />
         </View>
-        <View className="flex-2 border-2">
-          <Text>{lives} lives remaining</Text>
-          <View className="">
+        <View className="flex-1 ">
+          <Text className="text-center my-2">
+            Tries remaining: {lives}
+          </Text>
+          <View className="items-center">
             <TouchableOpacity
-              disabled={selected.length !== 4}
-              style={
-                selected.length !== 4
-                  ? styles.disableButton
-                  : styles.button
-              }
+              disabled={isButtonDisabled}
+              className={`p-2 m-2 rounded-md w-[50%] ${isButtonDisabled ? 'bg-slate-50 border-black border ' : 'bg-slate-900'}`}
               onPress={handleSubmit}
             >
-              <Text>Submit</Text>
+              <Text
+                className={`${isButtonDisabled ? 'text-slate-500' : 'text-white font-bold'} text-center`}
+              >
+                Submit
+              </Text>
             </TouchableOpacity>
             {guessResult !== '' ? (
               guessResult === 'correct' ||
@@ -289,10 +303,12 @@ const styles = StyleSheet.create({
     backgroundColor: 'lightgrey',
     padding: 10,
     margin: 10,
+    borderRadius: 5,
   },
   disableButton: {
     backgroundColor: 'darkgrey',
     padding: 10,
     margin: 10,
+    borderRadius: 5,
   },
 });
