@@ -31,31 +31,56 @@ export default function Login() {
     createUser(user);
   };
 
+  const TextInputStyle =
+    'border border-black m-1 p-2 rounded-md';
+  const TextLabelStyle = 'm-1 text-left';
+
   return (
     <>
-      <View style={styles.container}>
-        <Text>Login</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Username..."
-          value={loginUserName}
-          onChangeText={setLoginUserName}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Password..."
-          value={loginPassword}
-          onChangeText={setLoginPassword}
-          secureTextEntry
-        />
-        <Pressable onPress={handleLogin}>
-          <Text></Text>
-        </Pressable>
-        <Pressable onPress={handleLogin}>
-          <Text>Login</Text>
-        </Pressable>
+      <View className="flex-1 justify-center items-center">
+        <View className="w-9/12">
+          <Text className="m-1 text-center text-base text-bold">
+            Login
+          </Text>
+          <TextInput className={TextLabelStyle}>
+            Username
+          </TextInput>
+          <TextInput
+            placeholder="Username"
+            value={loginUserName}
+            onChangeText={setLoginUserName}
+            className={TextInputStyle}
+          />
+          <TextInput className={TextLabelStyle}>
+            Password
+          </TextInput>
+          <TextInput
+            placeholder="Password"
+            value={loginPassword}
+            onChangeText={setLoginPassword}
+            secureTextEntry
+            className={TextInputStyle}
+          />
+          <Pressable onPress={handleLogin}>
+            <Text></Text>
+          </Pressable>
+          <Pressable
+            onPress={handleLogin}
+            className="rounded-md bg-black m-1 p-2 "
+          >
+            <Text className="text-white text-center ">
+              Login
+            </Text>
+          </Pressable>
+        </View>
       </View>
-
+      <View className="flex-1 justify-center items-center">
+        <View className="flex-row items-center w-9/12 my-4">
+          <View className="flex-1 h-0.5 bg-gray-300"></View>
+          <Text className="px-2 text-gray-400">OR</Text>
+          <View className="flex-1 h-0.5 bg-gray-300"></View>
+        </View>
+      </View>
       <View style={styles.container}>
         <Text>Sign up</Text>
         <TextInput
