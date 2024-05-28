@@ -5,6 +5,8 @@ import {
   FlatList,
   StyleSheet,
   TouchableOpacity,
+  Pressable,
+  Image,
 } from 'react-native';
 import { GameScreenProps } from './types';
 import { getGameDetails } from '../../../server/db';
@@ -14,7 +16,7 @@ export default function Game({
   navigation,
 }: GameScreenProps) {
   const { artists } = route.params;
-  const [items, setItems] = useState(artists)
+  const [items, setItems] = useState(artists);
   const [shuffledItems, setShuffledItems] = useState<
     string[]
   >([]);
@@ -121,7 +123,7 @@ export default function Game({
   }
 
   function handlePlayAgain() {
-    setItems([])
+    setItems([]);
     setFoundGroups([]);
     setGuessResult('');
     setLives(4);
@@ -135,85 +137,111 @@ export default function Game({
   }
 
   return (
-    <View style={styles.container}>
-      <View style={styles.centered}>
-        <Text>Welcome to Music Clash</Text>
-        <Text>{lives} lives remaining</Text>
-        <FlatList
-          data={shuffledItems}
-          numColumns={4}
-          renderItem={({ item }) => (
-            <View style={styles.cardContainer}>
-              <TouchableOpacity
-                onPress={() => handleClick(item)}
-                style={
-                  foundGroups.includes(item)
-                    ? [
-                        styles.foundCard,
-                        {
-                          backgroundColor:
-                            getBackgroundColor(item),
-                        },
-                      ]
-                    : selected.includes(item)
-                      ? styles.selectedCard
-                      : styles.cardButton
-                }
-                disabled={
-                  foundGroups.includes(item) || lives === 0
-                }
-              >
-                <View style={styles.card}>
-                  <Text>{item}</Text>
-                </View>
-              </TouchableOpacity>
-            </View>
-          )}
-          keyExtractor={(item) => item.toString()}
-        />
-        <TouchableOpacity
-          disabled={selected.length !== 4}
-          style={
-            selected.length !== 4
-              ? styles.disableButton
-              : styles.button
-          }
-          onPress={handleSubmit}
-        >
-          <Text>Submit</Text>
-        </TouchableOpacity>
-        {guessResult !== '' ? (
-          guessResult === 'correct' ||
-          guessResult === 'winner' ? (
-            <Text>Correct</Text>
-          ) : (
-            <Text>Try again</Text>
-          )
-        ) : null}
-        {guessResult === 'winner' ? (
-          <>
-            <Text>Winner</Text>
+    <>
+      <View className="flex bg-white just border-2">
+        <View className="flex-2 self-center  border-2">
+          <Image
+            className="self-center"
+            source={require('../../../assets/music(64px).png')}
+          />
+          <Text className="text-lg text-bold">
+            Welcome to Music Clash
+          </Text>
+        </View>
+        <View className=" flex-4 ">
+          <FlatList
+            data={shuffledItems}
+            numColumns={4}
+            contentContainerStyle={{
+              justifyContent: 'center',
+              alignItems: 'center',
+              // flexGrow: 1,
+            }}
+            renderItem={({ item }) => (
+              <View style={styles.cardContainer}>
+                <TouchableOpacity
+                  onPress={() => handleClick(item)}
+                  style={
+                    foundGroups.includes(item)
+                      ? [
+                          styles.foundCard,
+                          {
+                            backgroundColor:
+                              getBackgroundColor(item),
+                          },
+                        ]
+                      : selected.includes(item)
+                        ? styles.selectedCard
+                        : styles.cardButton
+                  }
+                  disabled={
+                    foundGroups.includes(item) ||
+                    lives === 0
+                  }
+                >
+                  <View className="flex-1 justify-center">
+                    <Text
+                      className={`font-bold text-center p-1 ${selected.includes(item) ? 'text-white' : 'text-black'}`}
+                    >
+                      {item}
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+              </View>
+            )}
+            keyExtractor={(item) => item.toString()}
+          />
+        </View>
+        <View className="flex-2 border-2">
+          <Text>{lives} lives remaining</Text>
+          <View className="">
             <TouchableOpacity
-              style={styles.button}
-              onPress={handlePlayAgain}
+              disabled={selected.length !== 4}
+              style={
+                selected.length !== 4
+                  ? styles.disableButton
+                  : styles.button
+              }
+              onPress={handleSubmit}
             >
-              <Text>Play again</Text>
+              <Text>Submit</Text>
             </TouchableOpacity>
-          </>
-        ) : null}
-        {lives === 0 ? (
-          <>
-            <Text>You lose</Text>{' '}
-            <TouchableOpacity
-              style={styles.button}
-              onPress={handlePlayAgain}
-            >
-              <Text>Play again</Text>
-            </TouchableOpacity>
-          </>
-        ) : null}
+            {guessResult !== '' ? (
+              guessResult === 'correct' ||
+              guessResult === 'winner' ? (
+                <Text>Correct</Text>
+              ) : (
+                <Text>Try again</Text>
+              )
+            ) : null}
+            {guessResult === 'winner' ? (
+              <>
+                <Text>Winner</Text>
+                <TouchableOpacity
+                  style={styles.button}
+                  onPress={handlePlayAgain}
+                >
+                  <Text>Play again</Text>
+                </TouchableOpacity>
+              </>
+            ) : null}
+            {lives === 0 ? (
+              <View>
+                <Text>You lose</Text>
+                <TouchableOpacity
+                  style={styles.button}
+                  onPress={handlePlayAgain}
+                >
+                  <View>
+                    <Text>Play again</Text>
+                  </View>
+                </TouchableOpacity>
+              </View>
+            ) : null}
+          </View>
+        </View>
       </View>
-    </View>
+    </>
   );
 }
 
@@ -228,8 +256,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   cardContainer: {
-    width: 100,
-    height: 100,
+    width: 85,
+    height: 85,
     margin: 5,
   },
   card: {
@@ -241,13 +269,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   cardButton: {
-    backgroundColor: 'lightblue',
+    backgroundColor: 'rgb(239, 239, 230)',
     width: '100%',
     height: '100%',
     position: 'relative',
   },
   selectedCard: {
-    backgroundColor: 'lightgreen',
+    backgroundColor: '#5A594E',
     width: '100%',
     height: '100%',
     position: 'relative',
