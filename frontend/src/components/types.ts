@@ -24,7 +24,7 @@ type RootStackParamList = {
 };
 type Props = NativeStackScreenProps<RootStackParamList>;
 type GameScreenProps = NativeStackScreenProps<RootStackParamList, 'Game'>;
-type MultiplayerScreenProps = NativeStackScreenProps<RootStackParamList, 'Game'>;
+type MultiplayerScreenProps = NativeStackScreenProps<RootStackParamList, 'Multiplayer'>;
 
 
 export { RootStackParamList, Props, GameScreenProps, MultiplayerScreenProps };
