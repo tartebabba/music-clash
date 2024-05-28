@@ -6,6 +6,11 @@ import Game from './frontend/src/components/Game';
 import Login from './frontend/src/components/LoginPage';
 import TestingPage from './frontend/src/components/TestingPage';
 import Multiplayer from './frontend/src/components/Multiplayer';
+import { NativeWindStyleSheet } from 'nativewind';
+
+NativeWindStyleSheet.setOutput({
+  default: 'native',
+});
 
 const Stack =
   createNativeStackNavigator<RootStackParamList>();
