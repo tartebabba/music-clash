@@ -1,8 +1,11 @@
-import { Text } from 'react-native';
+import { Text, View } from 'react-native';
+
 export default function TestingPage() {
   return (
-    <>
-      <Text>Hello</Text>
-    </>
+    <View className="flex-1 items-center justify-center bg-white">
+      <Text className="text-blue-500">
+        Open up App.js to start working on your app!!
+      </Text>
+    </View>
   );
 }
