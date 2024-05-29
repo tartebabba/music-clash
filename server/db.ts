@@ -37,15 +37,7 @@ interface ArtistSongs {
   song_4: string;
 }
 
-// export async function postMultipleArtistSongs(
-//   postObject: ArtistSongs[]
-// ) {
-//   const data = await supabase
-//     .from('game_details')
-//     .insert(postObject)
-//     .select();
-//   console.log(data);
-// }
+
 
 export async function createGame(
   postObject: ArtistSongs[]
@@ -106,11 +98,28 @@ export async function createUser(user: UserDetails): Promise<UserDetails[] | nul
     }
 
     if (!userExists) {
+      const {error: supabaseError} = await supabase.auth.signUp({
+        email: user.email,
+        password: user.password,
+        options: {
+          data: {
+            name: user.name,
+            username: user.username,
+          },
+        },
+      })
+      
+      if(supabaseError) {
+        throw new Error('Error inserting user with Supabase Auth');
+      }
+
+
+      const {password, ...userDetails} = user
       const { data, error: insertError } = await supabase
         .from('users')
-        .insert(user)
+        .insert(userDetails)
         .select();
-      
+        
       if (insertError) {
         throw new Error('Error inserting user');
       }
@@ -192,7 +201,3 @@ export async function insertArtistSongsCatalog(artistSongs:ArtistSongs) {
   }
 }
 
-
-// table top 100 artists top 10 (artist_songs_combinations)
-// get songs by artist function
-// prevent duplicate artist/game data

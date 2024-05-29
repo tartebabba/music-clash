@@ -53,7 +53,7 @@
           }]
     },
     "createUser":{
-        "description": "inserts a new user into users table. Throws an error if user already exists",
+        "description": "inserts a new user into users table and Supabase Auth users. Throws an error if user already exists",
         "exampleUserObject": {
             "name": "John Doe",
             "username": "john.doe",
