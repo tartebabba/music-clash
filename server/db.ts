@@ -90,27 +90,38 @@ interface UserDetails {
   password: string;
 }
 
-export async function createUser(user: UserDetails) {
+export async function createUser(user: UserDetails): Promise<UserDetails[] | null> {
   try {
     const { email } = user;
-    const { count: userExists, error } = await supabase
+    const { count: userExists, error: selectError } = await supabase
       .from('users')
-      .select(`email`, {
+      .select('email', {
         count: 'exact',
         head: true,
       })
-      .eq('email', `${email}`);
+      .eq('email', email);
+
+    if (selectError) {
+      throw new Error('Error checking existing user');
+    }
 
     if (!userExists) {
-      const { data, error } = await supabase
+      const { data, error: insertError } = await supabase
         .from('users')
         .insert(user)
         .select();
+      
+      if (insertError) {
+        throw new Error('Error inserting user');
+      }
+
+      return data;
     } else {
-      throw new Error(`User already exists.`);
+      throw new Error('User already exists.');
     }
   } catch (error) {
     console.error('Error in creating user:', error);
+    return null;
   }
 }
 
