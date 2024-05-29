@@ -11,12 +11,12 @@
   },
   "dependencies": {
     "@expo/metro-runtime": "~3.2.1",
-    "@react-native-picker/picker": "^2.7.6",
+    "@react-native-picker/picker": "^2.7.5",
     "@react-navigation/native": "^6.1.17",
     "@react-navigation/native-stack": "^6.9.26",
     "@supabase/supabase-js": "^2.43.2",
     "axios": "^1.7.1",
-    "expo": "~51.0.8",
+    "expo": "^51.0.9",
     "expo-auth-session": "~5.5.2",
     "expo-crypto": "~13.0.2",
     "expo-status-bar": "~1.12.1",
@@ -35,6 +35,7 @@
   "devDependencies": {
     "@babel/core": "^7.20.0",
     "@types/react": "~18.2.45",
+    "@types/react-native": "^0.73.0",
     "babel-preset-expo": "^11.0.6",
     "eslint": "^9.2.0",
     "eslint-config-prettier": "^9.1.0",
