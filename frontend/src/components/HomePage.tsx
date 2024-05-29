@@ -4,6 +4,7 @@ import {
   Text,
   View,
   StyleSheet,
+  Image,
 } from 'react-native';
 import { Props } from './types';
 import axios from 'axios';
@@ -105,21 +106,21 @@ export default function HomePage({ navigation }: Props) {
     }
   }, [response]);
 
-  const styles = StyleSheet.create({
-    title: {
-      fontSize: 40,
-    },
-    button: {
-      backgroundColor: 'lightgrey',
-      padding: 10,
-      margin: 10,
-    },
-    container: {
-      flex: 1,
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-  });
+  // const styles = StyleSheet.create({
+  //   title: {
+  //     fontSize: 40,
+  //   },
+  //   button: {
+  //     backgroundColor: 'lightgrey',
+  //     padding: 10,
+  //     margin: 10,
+  //   },
+  //   container: {
+  //     flex: 1,
+  //     alignItems: 'center',
+  //     justifyContent: 'center',
+  //   },
+  // });
 
   function handleGamePress() {
     navigation.navigate('Game', { artists: [] });
@@ -142,38 +143,41 @@ export default function HomePage({ navigation }: Props) {
   }
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Music Clash</Text>
-      <TouchableOpacity
-        style={styles.button}
-        onPress={handleGamePress}
-      >
-        <Text style={{ color: '#000' }}>Play game</Text>
+    <View 
+    className='flex-1 items-center justify-center'
+    >
+      <Text className='font text-6xl text-justify align-top'>Music Clash</Text>
+      <View className='items-center'>
+      <Image className='m-5' source={require('../../../assets/music(1).png')}/>
+      </View>
+
+      <TouchableOpacity onPress={handleGamePress}
+        className='border w-7/12 h-14 justify-center items-center rounded m-1'> 
+        <Text className='text-xl'>Play game</Text>
       </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.button}
-        onPress={handleLoginPress}
-      >
-        <Text style={{ color: '#000' }}>Login</Text>
+
+      <TouchableOpacity onPress={handleMultilayerPress}
+      className='border w-7/12  h-14 justify-center items-center rounded m-1'>
+        <Text className='text-xl'>Multiplayer</Text>
       </TouchableOpacity>
+
+      <TouchableOpacity onPress={handleLoginPress}
+      className='border w-7/12  h-14 justify-center items-center rounded m-1 bg-black'
+      >
+        <Text className='text-white text-xl'>Login</Text>
+      </TouchableOpacity>
+
       {token === '' ? (
-        <TouchableOpacity
-          style={styles.button}
-          onPress={handleSpotifyPress}
-        >
-          <Text style={{ color: '#000' }}>
-            Play with Spotify
-          </Text>
+        <TouchableOpacity onPress={handleSpotifyPress}
+        className='border w-7/12 h-14 justify-center items-center rounded bg-green-400 m-1'>
+          <Image className='h-1 w-1 p-4' source={require('../../../assets/spotify-icon.png')}/>
         </TouchableOpacity>
       ) : null}
-      <TouchableOpacity onPress={handleTestPress}>
-        <Text>TestingPage</Text>
+      
+      <TouchableOpacity onPress={handleTestPress}
+      className='border w-7/12  h-14 justify-center items-center rounded m-1'>
+        <Text className='text-xl'>TestingPage</Text>
       </TouchableOpacity>
-
-      <TouchableOpacity onPress={handleMultilayerPress}>
-        <Text>Multiplayer</Text>
-      </TouchableOpacity>
-
     </View>
   );
 }
