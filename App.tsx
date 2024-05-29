@@ -4,9 +4,10 @@ import { RootStackParamList } from './frontend/src/components/types';
 import HomePage from './frontend/src/components/HomePage';
 import Game from './frontend/src/components/Game';
 import Login from './frontend/src/components/LoginPage';
-import TestingPage from './frontend/src/components/TestingPage';
+import ProfilePage from './frontend/src/components/ProfilePage';
 import Multiplayer from './frontend/src/components/Multiplayer';
 import { NativeWindStyleSheet } from 'nativewind';
+import { UserProvider } from './frontend/src/components/ContextProvider';
 import moment from 'moment';
 
 NativeWindStyleSheet.setOutput({
@@ -22,27 +23,29 @@ export default function App() {
   );
   return (
     <>
-      <NavigationContainer>
-        <Stack.Navigator>
-          <Stack.Screen
-            name="HomePage"
-            component={HomePage}
-            options={{
-              title: `Music Clash - ${currentDate}`,
-            }}
-          />
-          <Stack.Screen name="Game" component={Game} />
-          <Stack.Screen name="Login" component={Login} />
-          <Stack.Screen
-            name="TestingPage"
-            component={TestingPage}
-          />
-          <Stack.Screen
-            name="Multiplayer"
-            component={Multiplayer}
-          />
-        </Stack.Navigator>
-      </NavigationContainer>
+      <UserProvider>
+        <NavigationContainer>
+          <Stack.Navigator>
+            <Stack.Screen
+              name="HomePage"
+              component={HomePage}
+              options={{
+                title: `Music Clash - ${currentDate}`,
+              }}
+            />
+            <Stack.Screen name="Game" component={Game} />
+            <Stack.Screen name="Login" component={Login} />
+            <Stack.Screen
+              name="ProfilePage"
+              component={ProfilePage}
+            />
+            <Stack.Screen
+              name="Multiplayer"
+              component={Multiplayer}
+            />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </UserProvider>
     </>
   );
 }
