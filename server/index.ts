@@ -20,6 +20,7 @@ type Room  = {
       player1: number;
       player2: number;
     };
+    game_id: number;
   }
   
   const rooms: { [key: string]: Room } = {};
@@ -31,7 +32,8 @@ io.on("connection", (socket: Socket) => {
     if (rooms[room].players.length === 2) {
       socket.emit("roomFull");
     } else if (rooms[room].players.length === 1) {
-      io.emit("roomReady");
+        rooms[room].game_id = Math.floor(Math.random() * 10) + 1;
+      io.emit("roomReady", { gameID: rooms[room].game_id });
     }
     if (room !== "") {
       socket.join(room);
@@ -64,8 +66,8 @@ io.on("connection", (socket: Socket) => {
         players: [user],
         rematchRequests: 0,
         score: { player1: 0, player2: 0 },
+        game_id: 0,
       };
-      console.log(rooms[room]);
     }
     socket.data.room = room;
     socket.data.user = user;
@@ -77,11 +79,11 @@ io.on("connection", (socket: Socket) => {
   });
 
   socket.on("groupFound", ( room: string, user: string, group: string ) => {
-    io.to(room).emit("groupFound", { user, group });
+    socket.broadcast.to(room).emit("groupFound", { user, group });
   });
 
   socket.on("incorrectGuess", ( room: string, user: string, group: string ) => {
-    io.to(room).emit("incorrectGuess", { user, group });
+    socket.broadcast.to(room).emit("incorrectGuess", { user, group });
   });
 
   socket.on("gameOver", ( user: string, room: string, lives: number ) => {
@@ -108,16 +110,17 @@ io.on("connection", (socket: Socket) => {
   });
 
   socket.on("rematchRequest", ( room: string ) => {
-    if (rooms[room]) {
+      if (rooms[room]) {
       rooms[room].rematchRequests += 1;
-      io.to(room).emit("rematchRequest");
+      socket.broadcast.to(room).emit("rematchRequest");
       checkRematchStatus(room);
     }
   });
 
   socket.on("confirmRematch", ( room: string ) => {
     if (rooms[room]) {
-      io.to(room).emit("confirmRematch");
+        let game_id = Math.floor(Math.random() * 10) + 1
+        io.to(room).emit("confirmRematch", { gameID: game_id });
       resetRoomState(room);
     }
   });
