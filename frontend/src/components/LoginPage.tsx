@@ -171,18 +171,4 @@ export default function Login({ navigation }: Props) {
     </>
   );
 }
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  input: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 10,
-    margin: 10,
-    borderColor: 'black',
-    borderWidth: 2,
-  },
-});
+
