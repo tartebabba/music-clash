@@ -4,7 +4,8 @@
   "main": "supabase-setup.js",
   "scripts": {
     "test": "jest backend.test.ts --runInBand",
-    "start": "nodemon index.ts"
+    "start": "nodemon index.ts",
+    "seed-test": "orig_dir=$(pwd) && cd .. && supabase db reset && cd \"$orig_dir\" && jest backend.test.ts --runInBand"
   },
   "keywords": [],
   "author": "",

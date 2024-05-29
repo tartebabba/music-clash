@@ -37,8 +37,6 @@ interface ArtistSongs {
   song_4: string;
 }
 
-
-
 export async function createGame(
   postObject: ArtistSongs[]
 ) {
@@ -132,6 +130,28 @@ export async function createUser(user: UserDetails): Promise<UserDetails[] | nul
     console.error('Error in creating user:', error);
     return null;
   }
+}
+
+interface UserLogin {
+  email: string;
+  password: string;
+}
+
+export async function loginUser(user:UserLogin) {
+  try {
+    const { data, error:loginError } = await supabase.auth.signInWithPassword({
+      email: user.email,
+      password: user.password,
+    })
+
+    if (loginError){ throw new Error('login error')}
+  
+    return data
+  } catch (error) {
+    console.error('Error in logging in user:', error);
+    return null;
+  }
+  
 }
 
 interface UserGame {
