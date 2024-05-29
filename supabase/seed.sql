@@ -104,8 +104,8 @@ values
 (20,'Sam Smith','I''m Not The Only One','Stay With Me','Too Good At Goodbyes','Unholy (feat. Kim Petras)'),
 (20,'Harry Styles','Adore You','As It Was','Sign of the Times','Watermelon Sugar'),
 (20,'Adele','Easy On Me','Rolling in the Deep','Set Fire to the Rain','Someone Like You');
-INSERT INTO users (name, username, email, password)
-VALUES ('John Doe', 'johndoe', 'john.doe@example.com', 'password123');
+INSERT INTO users (name, username, email)
+VALUES ('John Doe', 'johndoe', 'john.doe@example.com');
 INSERT INTO user_games (user_id, game_id, date, won, active, completed_row_1, completed_row_2)
 VALUES (1, 2, '2024-05-20', TRUE, FALSE, TRUE, TRUE);
 insert into

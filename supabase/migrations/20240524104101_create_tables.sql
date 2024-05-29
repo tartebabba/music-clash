@@ -17,8 +17,7 @@
   user_id SERIAL PRIMARY KEY,
   name VARCHAR,
   username VARCHAR(20) NOT NULL,
-  email VARCHAR NOT NULL,
-  password VARCHAR NOT NULL
+  email VARCHAR NOT NULL
   );
    CREATE TABLE user_games (
    id SERIAL PRIMARY KEY,
