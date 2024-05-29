@@ -3,7 +3,6 @@ import {
   Text,
   View,
   FlatList,
-  StyleSheet,
   TextInput,
   Pressable,
 } from 'react-native';
@@ -85,81 +84,6 @@ export default function Multiplayer({
       ]);
     }
   }, [gameID]);
-
-  const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-    },
-    centered: {
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-    cardContainer: {
-      width: 100,
-      height: 100,
-      margin: 5,
-    },
-    card: {
-      position: 'absolute',
-      width: '100%',
-      height: '100%',
-      backfaceVisibility: 'hidden',
-      justifyContent: 'center',
-      alignItems: 'center',
-    },
-    cardButton: {
-      backgroundColor: 'lightblue',
-      width: '100%',
-      height: '100%',
-      position: 'relative',
-    },
-    waitingCard: {
-      backgroundColor: 'darkgrey',
-      width: '100%',
-      height: '100%',
-      position: 'relative',
-    },
-    selectedCard: {
-      backgroundColor: 'lightgreen',
-      width: '100%',
-      height: '100%',
-      position: 'relative',
-    },
-    foundCard: {
-      width: '100%',
-      height: '100%',
-      position: 'relative',
-    },
-    button: {
-      backgroundColor: 'lightgrey',
-      padding: 10,
-      margin: 10,
-    },
-    disableButton: {
-      backgroundColor: 'darkgrey',
-      padding: 10,
-      margin: 10,
-    },
-    input: {
-      alignItems: 'center',
-      justifyContent: 'center',
-      padding: 10,
-      margin: 10,
-      borderColor: 'black',
-      borderWidth: 2,
-    },
-    row: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-    },
-    boardContainer: {
-      flex: 1,
-      alignItems: 'center',
-      margin: 40,
-    },
-  });
 
   type OpponentEvents = {
     lives: number;
@@ -357,14 +281,24 @@ export default function Multiplayer({
   }
 
   function getBackgroundColor(item: string) {
-    const colours = ['red', 'blue', 'purple', 'green'];
+    const colours = [
+      'red-600',
+      'green-400',
+      'indigo-500',
+      'cyan-500',
+    ];
     const index = foundGroups.indexOf(item);
     const groupIndex = Math.floor(index / 4);
     return colours[groupIndex];
   }
 
   function getOpponentBackgroundColor(index: number) {
-    const colours = ['red', 'blue', 'purple', 'green'];
+    const colours = [
+      'red-600',
+      'green-400',
+      'indigo-500',
+      'cyan-500',
+    ];
     const groupIndex = Math.floor(index / 4);
     return colours[groupIndex];
   }
@@ -423,10 +357,14 @@ export default function Multiplayer({
   }, [opponentDisconnected]);
 
   return (
-    <View style={styles.container}>
-      <View style={styles.centered}>
+    <View className="flex bg-white h-full">
+      {/* <View className="w-0 h-0 bg-red-600" />
+      <View className="w-0 h-0 bg-indigo-500" />
+      <View className="w-0 h-0 bg-cyan-500" />
+      <View className="w-0 h-0 bg-green-400" /> */}
+      <View className="flex-1 items-center justify-center">
         <TextInput
-          style={styles.input}
+          className="items-center justify-center p-2.5 m-2.5 border-2 border-black"
           placeholder="User..."
           value={user}
           onChangeText={setUser}
@@ -434,7 +372,7 @@ export default function Multiplayer({
         {room === '' ? (
           <>
             <Pressable
-              style={styles.button}
+              className="p-2 m-2 rounded-md w-[50%] bg-slate-50 border-black border"
               onPress={handleCreateRoom}
             >
               <Text>Create New Room</Text>
@@ -447,7 +385,7 @@ export default function Multiplayer({
                   onValueChange={(itemValue: string) =>
                     setSelectedRoom(itemValue)
                   }
-                  style={styles.input}
+                  className="items-center justify-center p-2.5 m-2.5 border-2 border-black"
                 >
                   <Picker.Item
                     label="Select a room..."
@@ -462,7 +400,7 @@ export default function Multiplayer({
                   ))}
                 </Picker>
                 <Pressable
-                  style={styles.button}
+                  className="p-2 m-2 rounded-md w-[50%] bg-slate-50 border-black border"
                   onPress={handleJoinRoom}
                 >
                   <Text>Join Room</Text>
@@ -477,7 +415,7 @@ export default function Multiplayer({
           <>
             <Text>{`Room: ${room}`}</Text>
             <Pressable
-              style={styles.button}
+              className="p-2 m-2 rounded-md w-[50%] bg-slate-50 border-black border"
               onPress={handleLeaveRoom}
             >
               <Text>Leave Room</Text>
@@ -489,126 +427,142 @@ export default function Multiplayer({
         {opponentDisconnected ? (
           <Text>Opponent Disconnected</Text>
         ) : null}
-        <View style={styles.row}>
-          <View style={styles.boardContainer}>
-            <Text>You have {lives} lives remaining</Text>
+        <View className="flex-row justify-between">
+          <View className="flex-2 p-2 m-4">
+            <Text className="text-center my-2">
+              You have {lives} lives remaining
+            </Text>
             {isFull && shuffledItems.length === 16 ? (
-              <FlatList
-                data={shuffledItems}
-                numColumns={4}
-                renderItem={({ item }) => (
-                  <View style={styles.cardContainer}>
-                    <Pressable
-                      onPress={() => handleClick(item)}
-                      style={
-                        foundGroups.includes(item)
-                          ? [
-                              styles.foundCard,
-                              {
-                                backgroundColor:
-                                  getBackgroundColor(item),
-                              },
-                            ]
-                          : selected.includes(item)
-                            ? styles.selectedCard
-                            : styles.cardButton
-                      }
-                      disabled={
-                        foundGroups.includes(item) ||
-                        lives === 0 ||
-                        opponentEvents.found_groups
-                          .length === 16 ||
-                        !isFull
-                      }
-                    >
-                      <View style={styles.card}>
-                        <Text>{item}</Text>
-                      </View>
-                    </Pressable>
-                  </View>
-                )}
-                keyExtractor={(item) => item.toString()}
-              />
+              <View className="flex-2 p-2">
+                <FlatList
+                  data={shuffledItems}
+                  numColumns={4}
+                  renderItem={({ item }) => (
+                    <View className="w-20 h-20 m-2 items-center">
+                      <Pressable
+                        onPress={() => handleClick(item)}
+                        className={`w-full h-full relative ${
+                          foundGroups.includes(item)
+                            ? `bg-${getBackgroundColor(item)}`
+                            : selected.includes(item)
+                              ? 'bg-[#5A594E]'
+                              : 'bg-[#efefe6]'
+                        }`}
+                        disabled={
+                          foundGroups.includes(item) ||
+                          lives === 0 ||
+                          opponentEvents.found_groups
+                            .length === 16 ||
+                          !isFull
+                        }
+                      >
+                        <View className="flex-1 justify-center">
+                          <Text
+                            className={`font-bold text-center p-1 ${
+                              selected.includes(item)
+                                ? 'text-white'
+                                : 'text-black'
+                            }`}
+                          >
+                            {item}
+                          </Text>
+                        </View>
+                      </Pressable>
+                    </View>
+                  )}
+                  keyExtractor={(item) => item.toString()}
+                />
+              </View>
             ) : (
-              <FlatList
-                data={[
-                  1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13,
-                  14, 15, 16,
-                ]}
-                numColumns={4}
-                renderItem={({ item }) => (
-                  <View style={styles.cardContainer}>
-                    <Pressable
-                      style={styles.cardButton}
-                      disabled={true}
-                    >
-                      <View style={styles.card}>
-                        <Text></Text>
-                      </View>
-                    </Pressable>
-                  </View>
-                )}
-                keyExtractor={(item) => item.toString()}
-              />
+              <View className="flex-2 p-2">
+                <FlatList
+                  data={[
+                    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12,
+                    13, 14, 15, 16,
+                  ]}
+                  numColumns={4}
+                  renderItem={({ item }) => (
+                    <View className="w-20 h-20 m-2 items-center">
+                      <Pressable
+                        className="bg-[#efefe6] w-full h-full relative"
+                        disabled={true}
+                      >
+                        <View className="flex-1 justify-center">
+                          <Text></Text>
+                        </View>
+                      </Pressable>
+                    </View>
+                  )}
+                  keyExtractor={(item) => item.toString()}
+                />
+              </View>
             )}
-            <Pressable
-              disabled={selected.length !== 4}
-              style={
-                selected.length !== 4
-                  ? styles.disableButton
-                  : styles.button
-              }
-              onPress={handleSubmit}
-            >
-              <Text>Submit</Text>
-            </Pressable>
-
-            {guessResult === 'winner' ||
-            guessResult === '' ||
-            lives === 0 ||
-            opponentEvents.found_groups.length ===
-              16 ? null : guessResult === 'correct' ? (
-              <Text>Correct</Text>
-            ) : (
-              <Text>Try again</Text>
-            )}
-
-            {guessResult === 'winner' ||
-            opponentEvents.lives === 0 ? (
-              <>
-                <Text>Winner</Text>{' '}
-                <Pressable
-                  style={styles.button}
-                  onPress={handlePlayAgain}
+            <View className="items-center">
+              <Pressable
+                disabled={selected.length !== 4}
+                className={
+                  selected.length !== 4
+                    ? 'p-2 m-2 rounded-md w-[50%] bg-slate-50 border-black border'
+                    : 'p-2 m-2 rounded-md w-[50%] bg-slate-900'
+                }
+                onPress={handleSubmit}
+              >
+                <Text
+                  className={`${selected.length !== 4 ? 'text-slate-500' : 'text-white font-bold'} text-center`}
                 >
-                  <Text>Play again</Text>
-                </Pressable>
-              </>
-            ) : null}
-            {lives === 0 ||
-            opponentEvents.found_groups.length === 16 ? (
-              <>
-                <Text>You lose</Text> <Text></Text>
-                <Pressable
-                  style={styles.button}
-                  onPress={handlePlayAgain}
-                >
-                  <Text>Play again</Text>
-                </Pressable>
-              </>
-            ) : null}
-            {showResults ? (
-              <Text>
-                Player1 {score.player1} wins : player2:{' '}
-                {score.player2} wins
-              </Text>
-            ) : null}
+                  Submit
+                </Text>
+              </Pressable>
+
+              {guessResult === 'winner' ||
+              guessResult === '' ||
+              lives === 0 ||
+              opponentEvents.found_groups.length ===
+                16 ? null : guessResult === 'correct' ? (
+                <Text>Correct</Text>
+              ) : (
+                <Text>Try again</Text>
+              )}
+
+              {guessResult === 'winner' ||
+              opponentEvents.lives === 0 ? (
+                <>
+                  <Text>Winner</Text>{' '}
+                  <Pressable
+                    className="p-2 m-2 rounded-md w-[50%] bg-slate-50 border-black border"
+                    onPress={handlePlayAgain}
+                  >
+                    <Text>Play again</Text>
+                  </Pressable>
+                </>
+              ) : null}
+              {lives === 0 ||
+              opponentEvents.found_groups.length === 16 ? (
+                <>
+                  <Text>You lose</Text>
+                  <Pressable
+                    className="p-2 m-2 rounded-md w-[50%] bg-slate-50 border-black border"
+                    onPress={handlePlayAgain}
+                  >
+                    <Text>Play again</Text>
+                  </Pressable>
+                </>
+              ) : null}
+              {showResults ? (
+                <Text>
+                  Player1 {score.player1} wins : player2:{' '}
+                  {score.player2} wins
+                </Text>
+              ) : null}
+            </View>
           </View>
-          <View style={styles.boardContainer}>
+          <View className="flex-2 p-2 m-4">
             {!isFull ? (
-              <Text>Waiting for opponent</Text>
+              <Text className="text-center my-2">
+                Waiting for opponent
+              </Text>
             ) : (
-              <Text>
+              <Text className="text-center my-2">
                 Opponent has {opponentEvents.lives} lives
                 remaining
               </Text>
@@ -618,25 +572,20 @@ export default function Multiplayer({
                 data={shuffledItems}
                 numColumns={4}
                 renderItem={({ item, index }) => (
-                  <View style={styles.cardContainer}>
+                  <View className="w-20 h-20 m-2 items-center">
                     <Pressable
-                      style={
+                      className={
                         index <
                         opponentEvents.found_groups.length
                           ? [
-                              styles.foundCard,
-                              {
-                                backgroundColor:
-                                  getOpponentBackgroundColor(
-                                    index
-                                  ),
-                              },
-                            ]
-                          : styles.cardButton
+                              'w-full h-full relative',
+                              `bg-${getOpponentBackgroundColor(index)}`,
+                            ].join(' ')
+                          : 'bg-[#efefe6] w-full h-full relative'
                       }
                       disabled={true}
                     >
-                      <View style={styles.card}>
+                      <View className="absolute w-full h-full backface-hidden flex items-center justify-center">
                         <Text></Text>
                       </View>
                     </Pressable>
@@ -652,12 +601,14 @@ export default function Multiplayer({
                 ]}
                 numColumns={4}
                 renderItem={({ item }) => (
-                  <View style={styles.cardContainer}>
+                  <View className="w-20 h-20 m-2 items-center">
                     <Pressable
-                      style={styles.waitingCard}
+                      className={
+                        'bg-darkgrey w-full h-full relative'
+                      }
                       disabled={true}
                     >
-                      <View style={styles.card}>
+                      <View className="flex-1 justify-center">
                         <Text></Text>
                       </View>
                     </Pressable>
@@ -675,7 +626,7 @@ export default function Multiplayer({
         ) : opponentRematchRequested &&
           !rematchRequested ? (
           <Pressable
-            style={styles.button}
+            className="p-2 m-2 rounded-md w-[50%] bg-slate-50 border-black border"
             onPress={confirmRematch}
           >
             <Text>Confirm rematch</Text>
