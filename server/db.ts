@@ -1,4 +1,5 @@
 import supabase from './supabase-setup';
+import { getRandomInt } from './utils/utils';
 
 export async function getGames() {
   try {
@@ -236,4 +237,37 @@ export async function insertArtistSongsCatalog(artistSongs:ArtistSongs) {
       throw error;
   }
 }
+
+export async function getArtistfromArtistSongsCatalog(id:number){
+  const { data } = await supabase
+    .from('artist_songs_catalog')
+    .select()
+    .eq('id', id);
+    if(data !== null){
+      return data[0]
+    }
+}
+
+export async function generateRandomVanillaGames() {
+  const twentyGames: any[][] = [];
+
+  for (let i = 0; i < 20; i++) {
+    const game: any[] = [];
+    const usedArtists = new Set<string>();
+    while (game.length < 4) {
+      const randomInt = getRandomInt(1, 20);
+      const randomArtist = await getArtistfromArtistSongsCatalog(randomInt);
+      if (!usedArtists.has(randomArtist.artist)) {
+        const {id, ...artistNoId} = randomArtist
+        game.push({ id: i + 1, ...artistNoId });
+        usedArtists.add(randomArtist.artist);
+      }
+    }
+    twentyGames.push(game);
+  }
+  return twentyGames;
+}
+
+
+
 
