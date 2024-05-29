@@ -138,7 +138,6 @@ export default function Login({ navigation }: Props) {
                 secureTextEntry
                 className={TextInputStyle}
               />
-              <Pressable onPress={handleLogin}></Pressable>
               <Pressable
                 onPress={handleLogin}
                 className="rounded-md bg-black my-4 mx-1 p-2"

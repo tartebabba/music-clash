@@ -61,6 +61,13 @@
             "password": "SecureP@ssw0rd!"
         }
     },
+    "loginUser":{
+        "description": "when passed an email and password, logs in a user via Supabase Auth. Returns null if user doesn't exist or password incorrect",
+        "exampleUserLoginObject":{
+            "email": "John Doe",
+            "password": "SecureP@ssw0rd!"
+        }
+    },
     "insertUserGame":{
         "description": "inserts a new user-game into user_games table",
         "exampleUserGameObject": {
