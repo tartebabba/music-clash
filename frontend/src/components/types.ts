@@ -1,4 +1,13 @@
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
+
+export interface User {
+  name: string;
+  username: string;
+  email: string;
+  password: string;
+}
+
+
 type RootStackParamList = {
   HomePage: undefined;
   Game: {
@@ -11,7 +20,7 @@ type RootStackParamList = {
     }[];
   };
   Login: undefined;
-  TestingPage: undefined;
+  ProfilePage: { user: User };
   Multiplayer: {
     artists: {
       artist: string;
