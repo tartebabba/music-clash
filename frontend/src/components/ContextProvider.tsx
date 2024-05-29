@@ -6,6 +6,7 @@ import React, {
 } from 'react';
 import { User } from './types';
 
+
 interface UserContextType {
   user: User | null; // It can be replaced with more complex user type
   setUser: (user: User | null) => void;

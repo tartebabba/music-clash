@@ -6,17 +6,18 @@ import {
   StyleSheet,
   Pressable,
 } from 'react-native';
-import { createUser } from '../../../server/db';
+import { createUser, loginUser, getUserByEmail} from '../../../server/db';
 import LoadingPage from './LoadingPage';
 import { Props, User } from './types';
 import { useUser } from './ContextProvider';
+import { useNavigation } from '@react-navigation/native';
 
 const TextInputStyle =
   'border border-slate-600 rounded-md m-1 p-2';
 const TextLabelStyle = 'm-1 text-left';
 
-export default function Login({ navigation }: Props) {
-  const [loginUserName, setLoginUserName] = useState('');
+export default function Login() {
+  const [loginEmail, setLoginEmail] = useState('');
   const [loginPassword, setLoginPassword] = useState('');
   const [isSigningUp, setIsSigningUp] = useState(false);
 
@@ -26,11 +27,28 @@ export default function Login({ navigation }: Props) {
   const [signUpPassword, setSignUpPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const { user, setUser } = useUser();
+  const navigation = useNavigation();
 
-  const handleLogin = () => {
-    console.log(loginUserName, loginPassword);
+  const handleLogin = async () => {
+    const userLogin = {email: loginEmail, password: loginPassword}
+    const response  = await loginUser(userLogin)
+    if(response) {
+      const data = await getUserByEmail(loginEmail)
+  
+      if (data && data.length > 0) {
+        const { name, username } = data[0];
+        setUser({name: name,
+        username: username,
+        email: loginEmail})
+        navigation.navigate("ProfilePage");
+      }
+    }
+    else {
+      console.error("Login failed");
+    }
   };
-
+  
+  
   const handleSignUp = () => {
     const user = {
       name: signUpName,
@@ -120,12 +138,12 @@ export default function Login({ navigation }: Props) {
           <>
             <View className="w-9/12">
               <Text className={TextLabelStyle}>
-                Username
+                Email
               </Text>
               <TextInput
-                placeholder="Username"
-                value={loginUserName}
-                onChangeText={setLoginUserName}
+                placeholder="Email"
+                value={loginEmail}
+                onChangeText={setLoginEmail}
                 className={TextInputStyle}
               />
               <Text className={TextLabelStyle}>

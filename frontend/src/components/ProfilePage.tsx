@@ -6,7 +6,7 @@ export default function ProfilePage({ route }: Props) {
   const { user, setUser } = useUser();
   console.log(route.params);
   console.log(user, 'from profile page');
-
+  
   return (
     <View
       style={{
