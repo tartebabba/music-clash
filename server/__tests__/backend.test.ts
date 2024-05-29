@@ -1,5 +1,6 @@
-import { getGames, getGameDetails } from '../db';
+import { getGames, getGameDetails, createUser} from '../db';
 import {describe, expect, test} from '@jest/globals';
+import supabase from '../supabase-setup';
 
 describe('getGameDetails', () => {
   test('returns an array of all games played', async () => {
@@ -175,4 +176,37 @@ describe('getGameDetails', () => {
   }]
   expect(data).toEqual(expected)
   })
+})
+
+describe('createUser', () => {
+  const user = {name: "Robbie Chapman",
+    username: "robbochobbo",
+    email: "robbiechapman@gmail.com",
+    password: "password123"}
+
+  test('creates a user in users table', async () => {
+    const data = await createUser(user)
+    const expected = [
+      {
+        user_id: 2,
+        name: 'Robbie Chapman',
+        username: 'robbochobbo',
+        email: 'robbiechapman@gmail.com'
+      }
+    ]
+    expect(data).toEqual(expected)
+  })
+  test('throws an error if user already exists', async () => {
+    const data = await createUser(user)
+    expect(data).toBe(null)
+  })
+
+  test('user is added to Supabase Auth and able to login', async () => {
+    
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email: 'robbiechapman@gmail.com',
+      password: 'password123',
+    })
+    expect(data.user?.aud).toBe('authenticated')
+})
 })
