@@ -115,13 +115,23 @@ export default function SpotifyConnectButton({
   }, [response]);
 
   function handleSpotifyPress() {
-    console.log(token !== '');
-    if (token !== '') {
-      setToken('');
+    const isConnected = token !== '';
+    console.log(isConnected);
+
+    if (isConnected) {
+      disconnectSpotify();
     } else {
       promptAsync();
     }
   }
+
+  function disconnectSpotify() {
+    setToken('');
+    navigation.navigate('Game', {
+      artists: [],
+    });
+  }
+
 
   return (
     <>
