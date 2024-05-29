@@ -10,6 +10,7 @@ import {
 import { GameScreenProps } from './types';
 import { getGameDetails } from '../../../server/db';
 import NavBar from './NavBar';
+import GameBanner from './GameBanner';
 
 export default function Game({ route }: GameScreenProps) {
   const { artists } = route.params;
@@ -129,7 +130,12 @@ export default function Game({ route }: GameScreenProps) {
   }
 
   function getBackgroundColor(item: string) {
-    const colours = ['red', 'blue', 'purple', 'green'];
+    const colours = [
+      '#dc2626',
+      '#4ade80',
+      '#6366f1',
+      '#06b6d4',
+    ];
     const index = foundGroups.indexOf(item);
     const groupIndex = Math.floor(index / 4);
     return colours[groupIndex];
@@ -142,13 +148,7 @@ export default function Game({ route }: GameScreenProps) {
       <View className="flex bg-white h-full">
         <NavBar />
         <View>
-          <Image
-            className="self-center m-2"
-            source={require('../../../assets/music(128px).png')}
-          />
-          <Text className="text-2xl font-bold text-center my-2">
-            Welcome to Music Clash
-          </Text>
+          <GameBanner />
           <Text className=" text-bold text-center my-1 mb-2">
             {gameType === 'Vanilla'
               ? 'Group Four Hits From One Artist'
@@ -188,7 +188,8 @@ export default function Game({ route }: GameScreenProps) {
                   <View className="flex-1 justify-center">
                     <Text
                       className={`font-bold text-center p-1 ${
-                        selected.includes(item)
+                        selected.includes(item) ||
+                        foundGroups.includes(item)
                           ? 'text-white'
                           : 'text-black'
                       }`}
@@ -285,17 +286,20 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     position: 'relative',
+    borderRadius: 10,
   },
   selectedCard: {
     backgroundColor: '#5A594E',
     width: '100%',
     height: '100%',
     position: 'relative',
+    borderRadius: 10,
   },
   foundCard: {
     width: '100%',
     height: '100%',
     position: 'relative',
+    borderRadius: 10,
   },
   button: {
     backgroundColor: 'lightgrey',
