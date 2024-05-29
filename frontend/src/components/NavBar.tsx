@@ -1,40 +1,28 @@
 import React, { useState } from 'react';
-import {
-  View,
-  Pressable,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  Image,
-} from 'react-native';
+import { View, Pressable, Image } from 'react-native';
 
 import LoginButton from './LoginButton';
-import { Props } from './types';
+import SpotifyConnectButton from './SpotifyConnect';
+import { useNavigation } from '@react-navigation/native';
 
 export default function NavBar() {
+  const navigation = useNavigation();
   const [isButtonDisabled, setIsButtonDisabled] =
     useState(false);
-  const [isSpotifyConnected, setIsSpotifyConnected] =
-    useState(false);
+
+  function handleLogoPress() {
+    navigation.navigate('HomePage');
+  }
 
   return (
     <View className="flex-row items-center">
-      <Image
-        className="m-2"
-        source={require('../../../assets/music(64px).png')}
-      />
-      <View className="flex-grow" />
-      <TouchableOpacity className="p-2 m-2 rounded-md w-[20%] h-8 bg-green-400 items-center">
-        {isSpotifyConnected ? (
-          <Image
-            className="h-full w-full "
-            source={require('../../../assets/spotify-icon.png')}
-            resizeMode="contain"
-          />
-        ) : (
-          <Text className="text-center">Connect</Text>
-        )}
-      </TouchableOpacity>
+      <Pressable onPress={handleLogoPress}>
+        <Image
+          className="m-2"
+          source={require('../../../assets/music(64px).png')}
+        />
+      </Pressable>
+      <SpotifyConnectButton />
       <LoginButton />
     </View>
   );
