@@ -10,14 +10,6 @@ import {
 import { GameScreenProps } from './types';
 import { getGameDetails } from '../../../server/db';
 import NavBar from './NavBar';
-import GameBanner from './GameBanner';
-import EndGameBanner from './EndGame';
-
-type GameState = {
-  isGameOver: boolean;
-  triesRemaining: number;
-  isSpotifyGame: boolean;
-};
 
 export default function Game({ route }: GameScreenProps) {
   const { artists } = route.params;
@@ -29,40 +21,11 @@ export default function Game({ route }: GameScreenProps) {
   const [gameType, setGameType] =
     useState<string>('Spotify');
 
-
-  const [gameState, setGameState] = useState<GameState>({
-    isGameOver: false,
-    isSpotifyGame: true,
-    triesRemaining: 4,
-  });
-
-  useEffect(() => {
-    if (items.length === 0) {
-      let gameID = Math.floor(Math.random() * 10) + 1;
-      getGameDetails(gameID).then(
-        (randomDefaultGameItems) => {
-          if (
-            randomDefaultGameItems?.length === 0 ||
-            !randomDefaultGameItems
-          ) {
-            console.log('Failed to fetch game details!');
-            return;
-          }
-          setGroups(
-            randomDefaultGameItems.map((item) => [
-              item.song_1,
-              item.song_2,
-              item.song_3,
-              item.song_4,
-            ])
-          );
-
     useEffect(() => {
       setItems(artists);
       setGameType('Spotify');
       console.log(items);
     }, [artists]);
-
 
     useEffect(() => {
       if (items.length === 0) {
@@ -85,23 +48,6 @@ export default function Game({ route }: GameScreenProps) {
               ])
             );
 
-
-          setGameType('Vanilla');
-          setGameState((prevState) => ({
-            ...prevState,
-            isSpotifyGame: false,
-          }));
-        }
-      );
-    } else {
-      setGroups(
-        items.map((item) => [
-          item.song_1,
-          item.song_2,
-          item.song_3,
-          item.song_4,
-        ])
-
             setShuffledItems([
               ...randomDefaultGameItems
                 .flatMap((item) => [
@@ -112,7 +58,6 @@ export default function Game({ route }: GameScreenProps) {
                 ])
                 .sort(() => 0.5 - Math.random()),
             ]);
-
 
             setGameType('Vanilla');
           }
@@ -177,133 +122,143 @@ export default function Game({ route }: GameScreenProps) {
       }
       setSelected([]);
 
+      if (correct === false) {
+        setLives(lives - 1);
+      }
+    }
 
-    if (correct === false) {
-      setLives(lives - 1);
-      setGameState((prevState) => ({
-        ...prevState,
-        triesRemaining: prevState.triesRemaining - 1,
-      }));
+    function handlePlayAgain() {
+      setItems([]);
+      setFoundGroups([]);
+      setGuessResult('');
+      setLives(4);
+    }
 
+    function getBackgroundColor(item: string) {
+      const colours = ['red', 'blue', 'purple', 'green'];
+      const index = foundGroups.indexOf(item);
+      const groupIndex = Math.floor(index / 4);
+      return colours[groupIndex];
+    }
 
-  function getBackgroundColor(item: string) {
-    const colours = [
-      '#dc2626',
-      '#4ade80',
-      '#6366f1',
-      '#06b6d4',
-    ];
-    const index = foundGroups.indexOf(item);
-    const groupIndex = Math.floor(index / 4);
-    return colours[groupIndex];
-  }
+    const isButtonDisabled = selected.length !== 4;
 
-  const isButtonDisabled = selected.length !== 4;
-  const endGameBannerProps = {
-    gameState,
-    foundGroups,
-    setItems,
-    setFoundGroups,
-    setGuessResult,
-    setLives,
-  };
-
-  return (
-    <>
-      <View className="flex bg-white h-full">
-        <NavBar />
-        <View>
-          <GameBanner />
-          <Text className=" text-bold text-center my-1 mb-2">
-            {gameType === 'Vanilla'
-              ? 'Group Four Hits From One Artist'
-              : 'Group Four Hits From One Artist From Your Music Library'}
-          </Text>
-        </View>
-        <View className="flex-2 p-2">
-          <FlatList
-            data={shuffledItems}
-            numColumns={4}
-            contentContainerStyle={{
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-            renderItem={({ item }) => (
-              <View style={styles.cardContainer}>
-                <TouchableOpacity
-                  onPress={() => handleClick(item)}
-                  style={
-                    foundGroups.includes(item)
-                      ? [
-                          styles.foundCard,
-                          {
-                            backgroundColor:
-                              getBackgroundColor(item),
-                          },
-                        ]
-                      : selected.includes(item)
-                        ? styles.selectedCard
-                        : styles.cardButton
-                  }
-                  disabled={
-                    foundGroups.includes(item) ||
-                    lives === 0
-                  }
-                >
-                  <View className="flex-1 justify-center">
-                    <Text
-                      className={`font-bold text-center p-1 ${
-                        selected.includes(item) ||
-                        foundGroups.includes(item)
-                          ? 'text-white'
-                          : 'text-black'
-                      }`}
-                    >
-                      {item}
-                    </Text>
-                  </View>
-                </TouchableOpacity>
-              </View>
-            )}
-            keyExtractor={(item) => item.toString()}
-          />
-        </View>
-        <View className="flex-1 ">
-          <Text className="text-center my-2">
-            Tries remaining: {lives}
-          </Text>
-          <View className="items-center">
-            <TouchableOpacity
-              disabled={isButtonDisabled}
-              className={`p-2 m-2 rounded-md w-[50%] ${isButtonDisabled ? 'bg-slate-50 border-black border ' : 'bg-slate-900'}`}
-              onPress={handleSubmit}
-            >
-              <Text
-                className={`${isButtonDisabled ? 'text-slate-500' : 'text-white font-bold'} text-center`}
+    return (
+      <>
+        <View className="flex bg-white h-full">
+          <NavBar />
+          <View>
+            <Image
+              className="self-center m-2"
+              source={require('../../../assets/music(128px).png')}
+            />
+            <Text className="text-2xl font-bold text-center my-2">
+              Welcome to Music Clash
+            </Text>
+            <Text className=" text-bold text-center my-1 mb-2">
+              {gameType === 'Vanilla'
+                ? 'Group Four Hits From One Artist'
+                : 'Group Four Hits From One Artist From Your Music Library'}
+            </Text>
+          </View>
+          <View className="flex-2 p-2">
+            <FlatList
+              data={shuffledItems}
+              numColumns={4}
+              contentContainerStyle={{
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+              renderItem={({ item }) => (
+                <View style={styles.cardContainer}>
+                  <TouchableOpacity
+                    onPress={() => handleClick(item)}
+                    style={
+                      foundGroups.includes(item)
+                        ? [
+                            styles.foundCard,
+                            {
+                              backgroundColor:
+                                getBackgroundColor(item),
+                            },
+                          ]
+                        : selected.includes(item)
+                          ? styles.selectedCard
+                          : styles.cardButton
+                    }
+                    disabled={
+                      foundGroups.includes(item) ||
+                      lives === 0
+                    }
+                  >
+                    <View className="flex-1 justify-center">
+                      <Text
+                        className={`font-bold text-center p-1 ${
+                          selected.includes(item)
+                            ? 'text-white'
+                            : 'text-black'
+                        }`}
+                      >
+                        {item}
+                      </Text>
+                    </View>
+                  </TouchableOpacity>
+                </View>
+              )}
+              keyExtractor={(item) => item.toString()}
+            />
+          </View>
+          <View className="flex-1 ">
+            <Text className="text-center my-2">
+              Tries remaining: {lives}
+            </Text>
+            <View className="items-center">
+              <TouchableOpacity
+                disabled={isButtonDisabled}
+                className={`p-2 m-2 rounded-md w-[50%] ${isButtonDisabled ? 'bg-slate-50 border-black border ' : 'bg-slate-900'}`}
+                onPress={handleSubmit}
               >
-                Submit
-              </Text>
-            </TouchableOpacity>
-            {guessResult !== '' ? (
-              guessResult === 'correct' ||
-              guessResult === 'winner' ? (
-                <Text>Correct</Text>
-              ) : (
-                <Text>Try again</Text>
-              )
-            ) : null}
-            {guessResult === 'winner' ? (
-              <>
-                <Text>Winner</Text>
-                <TouchableOpacity
-                  style={styles.button}
-                  onPress={handlePlayAgain}
+                <Text
+                  className={`${isButtonDisabled ? 'text-slate-500' : 'text-white font-bold'} text-center`}
                 >
-                  <Text>Play again</Text>
-                </TouchableOpacity>
-              </>
-            ) : null}
-            <EndGameBanner {...endGameBannerProps} />
+                  Submit
+                </Text>
+              </TouchableOpacity>
+              {guessResult !== '' ? (
+                guessResult === 'correct' ||
+                guessResult === 'winner' ? (
+                  <Text>Correct</Text>
+                ) : (
+                  <Text>Try again</Text>
+                )
+              ) : null}
+              {guessResult === 'winner' ? (
+                <>
+                  <Text>Winner</Text>
+                  <TouchableOpacity
+                    style={styles.button}
+                    onPress={handlePlayAgain}
+                  >
+                    <Text>Play again</Text>
+                  </TouchableOpacity>
+                </>
+              ) : null}
+              {lives === 0 ? (
+                <View>
+                  <Text className="text-center">
+                    You lose
+                  </Text>
+                  <TouchableOpacity
+                    style={styles.button}
+                    onPress={handlePlayAgain}
+                  >
+                    <View>
+                      <Text>Play again</Text>
+                    </View>
+                  </TouchableOpacity>
+                </View>
+              ) : null}
+            </View>
           </View>
         </View>
       </>
@@ -338,20 +293,17 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     position: 'relative',
-    borderRadius: 10,
   },
   selectedCard: {
     backgroundColor: '#5A594E',
     width: '100%',
     height: '100%',
     position: 'relative',
-    borderRadius: 10,
   },
   foundCard: {
     width: '100%',
     height: '100%',
     position: 'relative',
-    borderRadius: 10,
   },
   button: {
     backgroundColor: 'lightgrey',
