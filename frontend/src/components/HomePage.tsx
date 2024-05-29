@@ -106,22 +106,6 @@ export default function HomePage({ navigation }: Props) {
     }
   }, [response]);
 
-  // const styles = StyleSheet.create({
-  //   title: {
-  //     fontSize: 40,
-  //   },
-  //   button: {
-  //     backgroundColor: 'lightgrey',
-  //     padding: 10,
-  //     margin: 10,
-  //   },
-  //   container: {
-  //     flex: 1,
-  //     alignItems: 'center',
-  //     justifyContent: 'center',
-  //   },
-  // });
-
   function handleGamePress() {
     navigation.navigate('Game', { artists: [] });
   }
