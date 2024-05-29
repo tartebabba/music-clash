@@ -29,6 +29,7 @@ export default function Game({ route }: GameScreenProps) {
   const [gameType, setGameType] =
     useState<string>('Spotify');
 
+
   const [gameState, setGameState] = useState<GameState>({
     isGameOver: false,
     isSpotifyGame: true,
@@ -56,16 +57,34 @@ export default function Game({ route }: GameScreenProps) {
             ])
           );
 
-          setShuffledItems([
-            ...randomDefaultGameItems
-              .flatMap((item) => [
+    useEffect(() => {
+      setItems(artists);
+      setGameType('Spotify');
+      console.log(items);
+    }, [artists]);
+
+
+    useEffect(() => {
+      if (items.length === 0) {
+        let gameID = Math.floor(Math.random() * 10) + 1;
+        getGameDetails(gameID).then(
+          (randomDefaultGameItems) => {
+            if (
+              randomDefaultGameItems?.length === 0 ||
+              !randomDefaultGameItems
+            ) {
+              console.log('Failed to fetch game details!');
+              return;
+            }
+            setGroups(
+              randomDefaultGameItems.map((item) => [
                 item.song_1,
                 item.song_2,
                 item.song_3,
                 item.song_4,
               ])
-              .sort(() => 0.5 - Math.random()),
-          ]);
+            );
+
 
           setGameType('Vanilla');
           setGameState((prevState) => ({
@@ -82,57 +101,82 @@ export default function Game({ route }: GameScreenProps) {
           item.song_3,
           item.song_4,
         ])
-      );
 
-      setShuffledItems([
-        ...items
-          .flatMap((item) => [
+            setShuffledItems([
+              ...randomDefaultGameItems
+                .flatMap((item) => [
+                  item.song_1,
+                  item.song_2,
+                  item.song_3,
+                  item.song_4,
+                ])
+                .sort(() => 0.5 - Math.random()),
+            ]);
+
+
+            setGameType('Vanilla');
+          }
+        );
+      } else {
+        setGroups(
+          items.map((item) => [
             item.song_1,
             item.song_2,
             item.song_3,
             item.song_4,
           ])
-          .sort(() => 0.5 - Math.random()),
-      ]);
-    }
-  }, [items]);
+        );
 
-  const [selected, setSelected] = useState<string[]>([]);
-  const [foundGroups, setFoundGroups] = useState<string[]>(
-    []
-  );
-  const [guessResult, setGuessResult] = useState('');
-  const [lives, setLives] = useState(4);
+        setShuffledItems([
+          ...items
+            .flatMap((item) => [
+              item.song_1,
+              item.song_2,
+              item.song_3,
+              item.song_4,
+            ])
+            .sort(() => 0.5 - Math.random()),
+        ]);
+      }
+    }, [items]);
 
-  function handleClick(item: string) {
-    if (selected.includes(item)) {
-      setSelected(
-        selected.filter((elem) => {
-          return elem !== item;
-        })
-      );
-    } else if (selected.length < 4) {
-      setSelected([...selected, item]);
-    }
-  }
+    const [selected, setSelected] = useState<string[]>([]);
+    const [foundGroups, setFoundGroups] = useState<
+      string[]
+    >([]);
+    const [guessResult, setGuessResult] = useState('');
+    const [lives, setLives] = useState(4);
 
-  function handleSubmit() {
-    const guess = selected.sort().join('');
-    setGuessResult('incorrect');
-    let correct = false;
-
-    for (let i = 0; i < groups.length; i++) {
-      if (groups[i].sort().join('') === guess) {
-        setFoundGroups([...foundGroups, ...selected]);
-        setGuessResult('correct');
-        correct = true;
-
-        if (foundGroups.length === 12) {
-          setGuessResult('winner');
-        }
+    function handleClick(item: string) {
+      if (selected.includes(item)) {
+        setSelected(
+          selected.filter((elem) => {
+            return elem !== item;
+          })
+        );
+      } else if (selected.length < 4) {
+        setSelected([...selected, item]);
       }
     }
-    setSelected([]);
+
+    function handleSubmit() {
+      const guess = selected.sort().join('');
+      setGuessResult('incorrect');
+      let correct = false;
+
+      for (let i = 0; i < groups.length; i++) {
+        if (groups[i].sort().join('') === guess) {
+          setFoundGroups([...foundGroups, ...selected]);
+          setGuessResult('correct');
+          correct = true;
+
+          if (foundGroups.length === 12) {
+            setGuessResult('winner');
+          }
+        }
+      }
+      setSelected([]);
+
 
     if (correct === false) {
       setLives(lives - 1);
@@ -140,8 +184,7 @@ export default function Game({ route }: GameScreenProps) {
         ...prevState,
         triesRemaining: prevState.triesRemaining - 1,
       }));
-    }
-  }
+
 
   function getBackgroundColor(item: string) {
     const colours = [
@@ -263,9 +306,8 @@ export default function Game({ route }: GameScreenProps) {
             <EndGameBanner {...endGameBannerProps} />
           </View>
         </View>
-      </View>
-    </>
-  );
+      </>
+    );
 }
 
 const styles = StyleSheet.create({
@@ -313,12 +355,6 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: 'lightgrey',
-    padding: 10,
-    margin: 10,
-    borderRadius: 5,
-  },
-  disableButton: {
-    backgroundColor: 'darkgrey',
     padding: 10,
     margin: 10,
     borderRadius: 5,

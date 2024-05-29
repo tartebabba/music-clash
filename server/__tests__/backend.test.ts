@@ -1,48 +1,50 @@
-import { getGames, getGameDetails, createUser, loginUser} from '../db';
+import { getGames, getGameDetails, createUser, loginUser, getUserByEmail, generateRandomVanillaGames} from '../db';
 import {describe, expect, test} from '@jest/globals';
 import supabase from '../supabase-setup';
+
+
 
 describe('getGameDetails', () => {
   test('returns an array of all games played', async () => {
     const data = await getGameDetails(1)
     const expected = [
       {
-        id: 1,
-        game_id: 1,
-        artist: 'Taylor Swift',
-        song_1: 'Anti-Hero',
-        song_2: 'Blank Space',
-        song_3: 'Love Story',
-        song_4: 'Shake It Off'
+          id: 1,
+          artist: "Dua Lipa",
+          game_id: 1,
+          song_1: "Don't Start Now",
+          song_2: "Levitating (feat. DaBaby)",
+          song_3: "New Rules",
+          song_4: "One Kiss"
       },
       {
-        id: 2,
-        game_id: 1,
-        artist: 'Drake',
-        song_1: "God's Plan",
-        song_2: 'Hotline Bling',
-        song_3: 'In My Feelings',
-        song_4: 'One Dance'
+          id: 2,
+          game_id: 1,
+          artist: "Ed Sheeran",
+          song_1: "Bad Habits",
+          song_2: "Perfect",
+          song_3: "Shape of You",
+          song_4: "Thinking Out Loud"
       },
       {
-        id: 3,
-        game_id: 1,
-        artist: 'The Weeknd',
-        song_1: 'Blinding Lights',
-        song_2: 'Save Your Tears',
-        song_3: 'Starboy',
-        song_4: 'The Hills'
+          id: 3,
+          game_id: 1,
+          artist: "Coldplay",
+          song_1: "A Sky Full of Stars",
+          song_2: "The Scientist",
+          song_3: "Viva La Vida",
+          song_4: "Yellow"
       },
       {
-        id: 4,
-        game_id: 1,
-        artist: 'Ed Sheeran',
-        song_1: 'Bad Habits',
-        song_2: 'Perfect',
-        song_3: 'Shape of You',
-        song_4: 'Thinking Out Loud'
+          id: 4,
+          game_id: 1,
+          artist: "Post Malone",
+          song_1: "Circles",
+          song_2: "Rockstar (feat. 21 Savage)",
+          song_3: "Sunflower (with Swae Lee)",
+          song_4: "Wow."
       }
-    ]
+  ]
     expect(data).toEqual(expected)
   })
 })
@@ -138,42 +140,44 @@ describe('getGames', () => {
 describe('getGameDetails', () => {
   test('when passed a game ID, returns an array of objects containing the artists and songs in that game', async () => {
     const data = await getGameDetails(3)
-    const expected = [{
-      "game_id": 3,
-      "id": 9,
-      "artist": "Kanye West",
-      "song_1": "Gold Digger",
-      "song_2": "Heartless",
-      "song_3": "Power",
-      "song_4": "Stronger"
-  },
-  {
-      "game_id": 3,
-      "id": 10,
-      "artist": "The Beatles",
-      "song_1": "Come Together",
-      "song_2": "Here Comes The Sun",
-      "song_3": "Let It Be",
-      "song_4": "Yesterday"
-  },
-  {
-      "game_id": 3,
-      "id": 11,
-      "artist": "Michael Jackson",
-      "song_1": "Beat It",
-      "song_2": "Billie Jean",
-      "song_3": "Smooth Criminal",
-      "song_4": "Thriller"
-  },
-  {
-      "game_id": 3,
-      "id": 12,
-      "artist": "Queen",
-      "song_1": "Another One Bites The Dust",
-      "song_2": "Bohemian Rhapsody",
-      "song_3": "Don't Stop Me Now",
-      "song_4": "Under Pressure"
-  }]
+    const expected = [
+      {
+          game_id: 3,
+          id: 9,
+          artist: "Kendrick Lamar",
+          song_1: "All The Stars (with SZA)",
+          song_2: "HUMBLE",
+          song_3: "LOVE. FEAT. ZACARI",
+          song_4: "Money Trees"
+      },
+      {
+          game_id: 3,
+          id: 10,
+          artist: "Taylor Swift",
+          song_1: "Anti-Hero",
+          song_2: "Blank Space",
+          song_3: "Love Story",
+          song_4: "Shake It Off"
+      },
+      {
+          game_id: 3,
+          id: 11,
+          artist: "Maroon 5",
+          song_1: "Maps",
+          song_2: "Memories",
+          song_3: "Payphone",
+          song_4: "Sugar"
+      },
+      {
+          game_id: 3,
+          id: 12,
+          artist: "Kanye West",
+          song_1: "Gold Digger",
+          song_2: "Heartless",
+          song_3: "Power",
+          song_4: "Stronger"
+      }
+  ]
   expect(data).toEqual(expected)
   })
 })
@@ -229,3 +233,20 @@ describe('loginUser', () => {
     expect(data).toBe(null)
   })
 })
+
+describe('getUserByEmail', () => {
+  test('when passed an email address, returns the user_id, username, email and name of user', async () => {
+    const data = await getUserByEmail("robbiechapman@gmail.com")
+    const expected = [
+      {
+        user_id: 2,
+        name: 'Robbie Chapman',
+        username: 'robbochobbo',
+        email: 'robbiechapman@gmail.com'
+      }
+    ]
+    expect(data).toEqual(expected)
+  })
+})
+
+
