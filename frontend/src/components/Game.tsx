@@ -5,11 +5,11 @@ import {
   FlatList,
   StyleSheet,
   TouchableOpacity,
-  Pressable,
   Image,
 } from 'react-native';
 import { GameScreenProps } from './types';
 import { getGameDetails } from '../../../server/db';
+import NavBar from './NavBar';
 
 export default function Game({
   route,
@@ -143,6 +143,7 @@ export default function Game({
   return (
     <>
       <View className="flex bg-white h-full">
+        <NavBar />
         <View>
           <Image
             className="self-center m-2"
