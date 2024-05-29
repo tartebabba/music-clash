@@ -7,8 +7,6 @@ import { useNavigation } from '@react-navigation/native';
 
 export default function NavBar() {
   const navigation = useNavigation();
-  const [isButtonDisabled, setIsButtonDisabled] =
-    useState(false);
 
   function handleLogoPress() {
     navigation.navigate('HomePage');
@@ -22,7 +20,11 @@ export default function NavBar() {
           source={require('../../../assets/music(64px).png')}
         />
       </Pressable>
-      <SpotifyConnectButton />
+      <View className="flex-grow" />
+      <View className="p-2 m-2 rounded-md w-[25%] h-8 bg-green-400 items-center border">
+        <SpotifyConnectButton />
+      </View>
+
       <LoginButton />
     </View>
   );

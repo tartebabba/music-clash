@@ -11,10 +11,7 @@ import { GameScreenProps } from './types';
 import { getGameDetails } from '../../../server/db';
 import NavBar from './NavBar';
 
-export default function Game({
-  route,
-  navigation,
-}: GameScreenProps) {
+export default function Game({ route }: GameScreenProps) {
   const { artists } = route.params;
   const [items, setItems] = useState(artists);
   const [shuffledItems, setShuffledItems] = useState<
