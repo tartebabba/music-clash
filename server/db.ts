@@ -164,6 +164,22 @@ interface UserGame {
   completed_row_2: boolean;
 }
 
+export async function getUserByEmail(email:String) {
+  try {
+    const { data, error:getUserError } = await supabase
+    .from('users')
+    .select()
+    .eq('email', email);
+
+    if (getUserError){ throw new Error('error getting user')}
+
+  return data;
+  } catch (error) {
+    console.error("Error getting user:", error);
+  }
+}
+
+
 export async function insertUserGame(userGame: UserGame) {
   try {
     let currentDate = new Date().toJSON();

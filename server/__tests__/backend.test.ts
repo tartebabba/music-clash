@@ -1,4 +1,4 @@
-import { getGames, getGameDetails, createUser, loginUser} from '../db';
+import { getGames, getGameDetails, createUser, loginUser, getUserByEmail} from '../db';
 import {describe, expect, test} from '@jest/globals';
 import supabase from '../supabase-setup';
 
@@ -227,5 +227,20 @@ describe('loginUser', () => {
     const wrongPassword = {email: "robbiechapman@gmail.com", password: "password12345"}
     const data = await loginUser(wrongPassword)
     expect(data).toBe(null)
+  })
+})
+
+describe('getUserByEmail', () => {
+  test('when passed an email address, returns the user_id, username, email and name of user', async () => {
+    const data = await getUserByEmail("robbiechapman@gmail.com")
+    const expected = [
+      {
+        user_id: 2,
+        name: 'Robbie Chapman',
+        username: 'robbochobbo',
+        email: 'robbiechapman@gmail.com'
+      }
+    ]
+    expect(data).toEqual(expected)
   })
 })
