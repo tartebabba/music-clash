@@ -5,16 +5,13 @@ import {
   FlatList,
   StyleSheet,
   TouchableOpacity,
-  Pressable,
   Image,
 } from 'react-native';
 import { GameScreenProps } from './types';
 import { getGameDetails } from '../../../server/db';
+import NavBar from './NavBar';
 
-export default function Game({
-  route,
-  navigation,
-}: GameScreenProps) {
+export default function Game({ route }: GameScreenProps) {
   const { artists } = route.params;
   const [items, setItems] = useState(artists);
   const [shuffledItems, setShuffledItems] = useState<
@@ -143,6 +140,7 @@ export default function Game({
   return (
     <>
       <View className="flex bg-white h-full">
+        <NavBar />
         <View>
           <Image
             className="self-center m-2"
