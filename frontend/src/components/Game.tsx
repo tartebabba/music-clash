@@ -11,6 +11,13 @@ import { GameScreenProps } from './types';
 import { getGameDetails } from '../../../server/db';
 import NavBar from './NavBar';
 import GameBanner from './GameBanner';
+import EndGameBanner from './EndGame';
+
+type GameState = {
+  isGameOver: boolean;
+  triesRemaining: number;
+  isSpotifyGame: boolean;
+};
 
 export default function Game({ route }: GameScreenProps) {
   const { artists } = route.params;
@@ -21,6 +28,12 @@ export default function Game({ route }: GameScreenProps) {
   const [groups, setGroups] = useState<string[][]>([]);
   const [gameType, setGameType] =
     useState<string>('Spotify');
+
+  const [gameState, setGameState] = useState<GameState>({
+    isGameOver: false,
+    isSpotifyGame: true,
+    triesRemaining: 4,
+  });
 
   useEffect(() => {
     if (items.length === 0) {
@@ -55,6 +68,10 @@ export default function Game({ route }: GameScreenProps) {
           ]);
 
           setGameType('Vanilla');
+          setGameState((prevState) => ({
+            ...prevState,
+            isSpotifyGame: false,
+          }));
         }
       );
     } else {
@@ -119,14 +136,11 @@ export default function Game({ route }: GameScreenProps) {
 
     if (correct === false) {
       setLives(lives - 1);
+      setGameState((prevState) => ({
+        ...prevState,
+        triesRemaining: prevState.triesRemaining - 1,
+      }));
     }
-  }
-
-  function handlePlayAgain() {
-    setItems([]);
-    setFoundGroups([]);
-    setGuessResult('');
-    setLives(4);
   }
 
   function getBackgroundColor(item: string) {
@@ -142,6 +156,14 @@ export default function Game({ route }: GameScreenProps) {
   }
 
   const isButtonDisabled = selected.length !== 4;
+  const endGameBannerProps = {
+    gameState,
+    foundGroups,
+    setItems,
+    setFoundGroups,
+    setGuessResult,
+    setLives,
+  };
 
   return (
     <>
@@ -238,19 +260,7 @@ export default function Game({ route }: GameScreenProps) {
                 </TouchableOpacity>
               </>
             ) : null}
-            {lives === 0 ? (
-              <View>
-                <Text>You lose</Text>
-                <TouchableOpacity
-                  style={styles.button}
-                  onPress={handlePlayAgain}
-                >
-                  <View>
-                    <Text>Play again</Text>
-                  </View>
-                </TouchableOpacity>
-              </View>
-            ) : null}
+            <EndGameBanner {...endGameBannerProps} />
           </View>
         </View>
       </View>
