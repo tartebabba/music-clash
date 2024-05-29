@@ -3,7 +3,6 @@ import {
   TouchableOpacity,
   Text,
   View,
-  StyleSheet,
   Image,
 } from 'react-native';
 import { Props } from './types';
@@ -89,8 +88,6 @@ export default function HomePage({ navigation }: Props) {
                   song_4: artistTracks[3],
                 };
 
-                
-
                 gameTracks.push(artistObj);
 
                 if (gameTracks.length === 4) {
@@ -122,46 +119,50 @@ export default function HomePage({ navigation }: Props) {
     promptAsync();
   }
 
-  function handleTestPress() {
-    navigation.navigate('TestingPage');
-  }
-
   return (
-    <View 
-    className='flex-1 items-center justify-center'
-    >
-      <Text className='font text-6xl text-justify align-top'>Music Clash</Text>
-      <View className='items-center'>
-      <Image className='m-5' source={require('../../../assets/music(1).png')}/>
+    <View className="flex-1 items-center justify-center">
+      <Text className="font text-6xl text-justify align-top">
+        Music Clash
+      </Text>
+      <View className="items-center">
+        <Image
+          className="m-5"
+          source={require('../../../assets/music(1).png')}
+        />
       </View>
 
-      <TouchableOpacity onPress={handleGamePress}
-        className='border w-7/12 h-14 justify-center items-center rounded m-1'> 
-        <Text className='text-xl'>Play game</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity onPress={handleMultilayerPress}
-      className='border w-7/12  h-14 justify-center items-center rounded m-1'>
-        <Text className='text-xl'>Multiplayer</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity onPress={handleLoginPress}
-      className='border w-7/12  h-14 justify-center items-center rounded m-1 bg-black'
+      <TouchableOpacity
+        onPress={handleGamePress}
+        className="border w-7/12 h-14 justify-center items-center rounded m-1"
       >
-        <Text className='text-white text-xl'>Login</Text>
+        <Text className="text-xl">Play game</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        onPress={handleMultilayerPress}
+        className="border w-7/12  h-14 justify-center items-center rounded m-1"
+      >
+        <Text className="text-xl">Multiplayer</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        onPress={handleLoginPress}
+        className="border w-7/12  h-14 justify-center items-center rounded m-1 bg-black"
+      >
+        <Text className="text-white text-xl">Login</Text>
       </TouchableOpacity>
 
       {token === '' ? (
-        <TouchableOpacity onPress={handleSpotifyPress}
-        className='border w-7/12 h-14 justify-center items-center rounded bg-green-400 m-1'>
-          <Image className='h-1 w-1 p-4' source={require('../../../assets/spotify-icon.png')}/>
+        <TouchableOpacity
+          onPress={handleSpotifyPress}
+          className="border w-7/12 h-14 justify-center items-center rounded bg-green-400 m-1"
+        >
+          <Image
+            className="h-1 w-1 p-4"
+            source={require('../../../assets/spotify-icon.png')}
+          />
         </TouchableOpacity>
       ) : null}
-      
-      <TouchableOpacity onPress={handleTestPress}
-      className='border w-7/12  h-14 justify-center items-center rounded m-1'>
-        <Text className='text-xl'>TestingPage</Text>
-      </TouchableOpacity>
     </View>
   );
 }
