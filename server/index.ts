@@ -32,17 +32,15 @@ io.on("connection", (socket: Socket) => {
     if (rooms[room].players.length === 2) {
       socket.emit("roomFull");
     } else if (rooms[room].players.length === 1) {
-        rooms[room].game_id = Math.floor(Math.random() * 10) + 1;
-      io.emit("roomReady", { gameID: rooms[room].game_id });
-    }
-    if (room !== "") {
       socket.join(room);
-
+  
       rooms[room].players.push(user);
       socket.data.room = room;
       socket.data.user = user;
-
+  
       console.log(`User ${user} joined room ${room}`);
+      rooms[room].game_id = Math.floor(Math.random() * 10) + 1;
+      io.emit("roomReady", { gameID: rooms[room].game_id, players: rooms[room].players });
       io.emit("availableRooms", { rooms });
     }
   });
@@ -50,6 +48,10 @@ io.on("connection", (socket: Socket) => {
   socket.on("leaveRoom", (user: string, room: string) => {
     socket.leave(room);
     rooms[room].players = rooms[room].players.filter(player => player !== user)
+    rooms[room].score = {
+      player1: 0,
+      player2: 0,
+    };
     if (rooms[room].players.length === 0) {
       delete rooms[room];
     }
@@ -131,6 +133,10 @@ io.on("connection", (socket: Socket) => {
     const user = socket.data.user;
     if (room && rooms[room]) {
         rooms[room].players = rooms[room].players.filter(player => player !== user)
+        rooms[room].score = {
+          player1: 0,
+          player2: 0,
+        };
       if (rooms[room].players.length === 0) {
         delete rooms[room];
       }
