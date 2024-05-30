@@ -12,6 +12,7 @@ import { getGameDetails } from '../../../server/db';
 import NavBar from './NavBar';
 import GameBanner from './GameBanner';
 import EndGameBanner from './EndGame';
+import GameFeedback from './GameFeedback';
 
 export default function Game({ route }: GameScreenProps) {
   const { artists } = route.params;
@@ -22,17 +23,44 @@ export default function Game({ route }: GameScreenProps) {
   const [groups, setGroups] = useState<string[][]>([]);
   const [gameType, setGameType] =
     useState<string>('Spotify');
+  const [selected, setSelected] = useState<string[]>([]);
+  const [foundGroups, setFoundGroups] = useState<string[]>(
+    []
+  );
+  const [guessResult, setGuessResult] = useState('');
+  const [lives, setLives] = useState(4);
 
   const [gameState, setGameState] = useState<GameState>({
     isGameOver: false,
     isSpotifyGame: true,
     triesRemaining: 4,
   });
+
+  const [showFeedback, setShowFeedback] = useState(false);
+
+  useEffect(() => {
+    if (guessResult) {
+      setShowFeedback(true);
+      const timer = setTimeout(() => {
+        setShowFeedback(false);
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [guessResult]);
+
   useEffect(() => {
     setItems(artists);
     setGameType('Spotify');
     console.log(items);
   }, [artists]);
+
+  useEffect(() => {
+    if (!gameState.triesRemaining)
+      return setGameState((prevState) => ({
+        ...prevState,
+        isGameOver: true,
+      }));
+  }, [gameState.triesRemaining]);
 
   useEffect(() => {
     if (items.length === 0) {
@@ -99,13 +127,6 @@ export default function Game({ route }: GameScreenProps) {
     }
   }, [items]);
 
-  const [selected, setSelected] = useState<string[]>([]);
-  const [foundGroups, setFoundGroups] = useState<string[]>(
-    []
-  );
-  const [guessResult, setGuessResult] = useState('');
-  const [lives, setLives] = useState(4);
-
   function handleClick(item: string) {
     if (selected.includes(item)) {
       setSelected(
@@ -160,6 +181,7 @@ export default function Game({ route }: GameScreenProps) {
   const endGameBannerProps = {
     gameState,
     foundGroups,
+    setGameState,
     setItems,
     setFoundGroups,
     setGuessResult,
@@ -168,8 +190,8 @@ export default function Game({ route }: GameScreenProps) {
 
   return (
     <>
-      <View className="flex bg-white h-full">
-        <NavBar setGameState={setGameState} />
+      <View className="flex bg-white h-full ">
+        <NavBar />
         <View>
           <GameBanner />
           <Text className=" text-bold text-center my-1 mb-2">
@@ -178,6 +200,11 @@ export default function Game({ route }: GameScreenProps) {
               : 'Group Four Hits From One Artist'}
           </Text>
         </View>
+        {showFeedback && (
+          <View className=" justify-center items-center">
+            <GameFeedback guessResult={guessResult} />
+          </View>
+        )}
         <View className="flex-2 p-2">
           <FlatList
             data={shuffledItems}
@@ -226,43 +253,37 @@ export default function Game({ route }: GameScreenProps) {
             keyExtractor={(item) => item.toString()}
           />
         </View>
-        <View className="flex-1 ">
-          <Text className="text-center my-2">
-            Tries remaining: {lives}
-          </Text>
-          <View className="items-center">
-            <TouchableOpacity
-              disabled={isButtonDisabled}
-              className={`p-2 m-2 rounded-md w-[50%] ${isButtonDisabled ? 'bg-slate-50 border-black border ' : 'bg-slate-900'}`}
-              onPress={handleSubmit}
-            >
-              <Text
-                className={`${isButtonDisabled ? 'text-slate-500' : 'text-white font-bold'} text-center`}
-              >
-                Submit
-              </Text>
-            </TouchableOpacity>
-            {guessResult !== '' ? (
-              guessResult === 'correct' ||
-              guessResult === 'winner' ? (
-                <Text>Correct</Text>
-              ) : (
-                <Text>Try again</Text>
-              )
-            ) : null}
-            {guessResult === 'winner' ? (
-              <>
-                <Text>Winner</Text>
-                <TouchableOpacity
-                  style={styles.button}
-                  onPress={handlePlayAgain}
-                >
-                  <Text>Play again</Text>
-                </TouchableOpacity>
-              </>
-            ) : null}
+        <View className="flex-1 items-center">
+          {gameState.isGameOver ? (
             <EndGameBanner {...endGameBannerProps} />
-          </View>
+          ) : (
+            <>
+              <Text className="text-center my-2">
+                Tries remaining: {lives}
+              </Text>
+              <View className="items-center">
+                <TouchableOpacity
+                  disabled={isButtonDisabled}
+                  className={`p-2 m-2 rounded-md w-[50%] ${
+                    isButtonDisabled
+                      ? 'bg-slate-50 border-black border'
+                      : 'bg-slate-900'
+                  }`}
+                  onPress={handleSubmit}
+                >
+                  <Text
+                    className={`${
+                      isButtonDisabled
+                        ? 'text-slate-500'
+                        : 'text-white font-bold'
+                    } text-center`}
+                  >
+                    Submit
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </>
+          )}
         </View>
       </View>
     </>
