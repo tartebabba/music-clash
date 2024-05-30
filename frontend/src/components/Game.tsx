@@ -135,6 +135,7 @@ export default function Game({ route }: GameScreenProps) {
           ])
           .sort(() => 0.5 - Math.random()),
       ]);
+      setGameArtists(items.map((item) => [item.artist]));
     }
   }, [items]);
 
