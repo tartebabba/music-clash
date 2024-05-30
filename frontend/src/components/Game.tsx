@@ -279,7 +279,7 @@ export default function Game({ route }: GameScreenProps) {
               <Text className="text-center my-2">
                 Tries remaining: {gameState.triesRemaining}
               </Text>
-              <View className="items-center">
+              <View className="items-center w-full">
                 <TouchableOpacity
                   disabled={isButtonDisabled}
                   className={`p-2 m-2 rounded-md w-[50%] ${
