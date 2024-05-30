@@ -5,7 +5,6 @@ import {
   FlatList,
   StyleSheet,
   TouchableOpacity,
-  Image,
 } from 'react-native';
 import { GameScreenProps, GameState } from './types';
 import { getGameDetails } from '../../../server/db';
@@ -21,14 +20,13 @@ export default function Game({ route }: GameScreenProps) {
     string[]
   >([]);
   const [groups, setGroups] = useState<string[][]>([]);
-  const [gameType, setGameType] =
-    useState<string>('Spotify');
   const [selected, setSelected] = useState<string[]>([]);
   const [foundGroups, setFoundGroups] = useState<string[]>(
     []
   );
-  const [guessResult, setGuessResult] = useState('');
-  const [lives, setLives] = useState(4);
+  const [guessResult, setGuessResult] = useState<
+    boolean | null
+  >(null);
 
   const [gameState, setGameState] = useState<GameState>({
     isGameOver: false,
@@ -38,11 +36,14 @@ export default function Game({ route }: GameScreenProps) {
 
   const [showFeedback, setShowFeedback] = useState(false);
 
+  const isButtonDisabled = selected.length !== 4;
+
   useEffect(() => {
-    if (guessResult) {
+    if (guessResult !== null) {
       setShowFeedback(true);
       const timer = setTimeout(() => {
         setShowFeedback(false);
+        setGuessResult(null);
       }, 3000);
       return () => clearTimeout(timer);
     }
@@ -50,7 +51,10 @@ export default function Game({ route }: GameScreenProps) {
 
   useEffect(() => {
     setItems(artists);
-    setGameType('Spotify');
+    setGameState((prevState) => ({
+      ...prevState,
+      isSpotifyGame: true,
+    }));
     console.log(items);
   }, [artists]);
 
@@ -64,7 +68,6 @@ export default function Game({ route }: GameScreenProps) {
 
   useEffect(() => {
     if (items.length === 0) {
-      setGameType('Vanilla');
       setGameState((prevState) => ({
         ...prevState,
         isSpotifyGame: false,
@@ -141,24 +144,29 @@ export default function Game({ route }: GameScreenProps) {
 
   function handleSubmit() {
     const guess = selected.sort().join('');
-    setGuessResult('incorrect');
     let correct = false;
+    console.log(guess);
 
     for (let i = 0; i < groups.length; i++) {
       if (groups[i].sort().join('') === guess) {
         setFoundGroups([...foundGroups, ...selected]);
-        setGuessResult('correct');
+        setGuessResult(true);
+        setShowFeedback(true);
         correct = true;
 
         if (foundGroups.length === 12) {
-          setGuessResult('winner');
+          setGuessResult(true);
+          setGameState((prevState) => ({
+            ...prevState,
+            isGameOver: true,
+          }));
         }
       }
     }
     setSelected([]);
 
     if (correct === false) {
-      setLives(lives - 1);
+      setGuessResult(false);
       setGameState((prevState) => ({
         ...prevState,
         triesRemaining: prevState.triesRemaining - 1,
@@ -177,15 +185,14 @@ export default function Game({ route }: GameScreenProps) {
     return colours[groupIndex];
   }
 
-  const isButtonDisabled = selected.length !== 4;
   const endGameBannerProps = {
     gameState,
     foundGroups,
+    setShowFeedback,
     setGameState,
     setItems,
     setFoundGroups,
     setGuessResult,
-    setLives,
   };
 
   return (
@@ -200,7 +207,7 @@ export default function Game({ route }: GameScreenProps) {
               : 'Group Four Hits From One Artist'}
           </Text>
         </View>
-        {showFeedback && (
+        {showFeedback && !gameState.isGameOver && (
           <View className=" justify-center items-center">
             <GameFeedback guessResult={guessResult} />
           </View>
@@ -232,7 +239,7 @@ export default function Game({ route }: GameScreenProps) {
                   }
                   disabled={
                     foundGroups.includes(item) ||
-                    lives === 0
+                    gameState.triesRemaining === 0
                   }
                 >
                   <View className="flex-1 justify-center">
@@ -259,7 +266,7 @@ export default function Game({ route }: GameScreenProps) {
           ) : (
             <>
               <Text className="text-center my-2">
-                Tries remaining: {lives}
+                Tries remaining: {gameState.triesRemaining}
               </Text>
               <View className="items-center">
                 <TouchableOpacity
@@ -291,27 +298,10 @@ export default function Game({ route }: GameScreenProps) {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  centered: {
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
   cardContainer: {
     width: 85,
     height: 85,
     margin: 5,
-  },
-  card: {
-    position: 'absolute',
-    width: '100%',
-    height: '100%',
-    backfaceVisibility: 'hidden',
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   cardButton: {
     backgroundColor: 'rgb(239, 239, 230)',
@@ -332,11 +322,5 @@ const styles = StyleSheet.create({
     height: '100%',
     position: 'relative',
     borderRadius: 10,
-  },
-  button: {
-    backgroundColor: 'lightgrey',
-    padding: 10,
-    margin: 10,
-    borderRadius: 5,
   },
 });

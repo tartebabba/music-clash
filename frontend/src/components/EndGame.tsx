@@ -5,23 +5,23 @@ export default function EndGameBanner(props) {
   const {
     gameState,
     foundGroups,
+    setShowFeedback,
     setGameState,
     setItems,
     setFoundGroups,
     setGuessResult,
-    setLives,
   } = props;
 
   function handlePlayAgain() {
     setItems([]);
     setFoundGroups([]);
-    setGuessResult('');
-    setLives(4);
+    setGuessResult(null);
     setGameState((prevState: GameState) => ({
       ...prevState,
       isGameOver: false,
       triesRemaining: 4,
     }));
+    setShowFeedback(false);
   }
   const feedbackText =
     gameState.isGameOver && foundGroups.length / 4 === 4
