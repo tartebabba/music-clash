@@ -34,5 +34,10 @@ type Props = NativeStackScreenProps<RootStackParamList>;
 type GameScreenProps = NativeStackScreenProps<RootStackParamList, 'Game'>;
 type MultiplayerScreenProps = NativeStackScreenProps<RootStackParamList, 'Multiplayer'>;
 
+type GameState = {
+  isGameOver: boolean;
+  triesRemaining: number;
+  isSpotifyGame: boolean;
+};
 
-export { RootStackParamList, Props, GameScreenProps, MultiplayerScreenProps };
+export { RootStackParamList, Props, GameScreenProps, MultiplayerScreenProps, GameState};

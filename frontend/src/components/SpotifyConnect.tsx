@@ -132,7 +132,6 @@ export default function SpotifyConnectButton({
     });
   }
 
-
   return (
     <>
       <TouchableOpacity
