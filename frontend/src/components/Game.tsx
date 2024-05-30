@@ -27,6 +27,9 @@ export default function Game({ route }: GameScreenProps) {
   const [guessResult, setGuessResult] = useState<
     boolean | null
   >(null);
+  const [gameArtists, setGameArtists] = useState<
+    string[][]
+  >([]);
 
   const [gameState, setGameState] = useState<GameState>({
     isGameOver: false,
@@ -55,7 +58,6 @@ export default function Game({ route }: GameScreenProps) {
       ...prevState,
       isSpotifyGame: true,
     }));
-    console.log(items);
   }, [artists]);
 
   useEffect(() => {
@@ -82,6 +84,12 @@ export default function Game({ route }: GameScreenProps) {
             console.log('Failed to fetch game details!');
             return;
           }
+          setGameArtists(
+            randomDefaultGameItems.map((item) => [
+              item.artist,
+            ])
+          );
+
           setGroups(
             randomDefaultGameItems.map((item) => [
               item.song_1,
@@ -145,7 +153,6 @@ export default function Game({ route }: GameScreenProps) {
   function handleSubmit() {
     const guess = selected.sort().join('');
     let correct = false;
-    console.log(guess);
 
     for (let i = 0; i < groups.length; i++) {
       if (groups[i].sort().join('') === guess) {
@@ -188,6 +195,7 @@ export default function Game({ route }: GameScreenProps) {
   const endGameBannerProps = {
     gameState,
     foundGroups,
+    gameArtists,
     setShowFeedback,
     setGameState,
     setItems,
@@ -260,11 +268,14 @@ export default function Game({ route }: GameScreenProps) {
             keyExtractor={(item) => item.toString()}
           />
         </View>
-        <View className="flex-1 items-center">
-          {gameState.isGameOver ? (
+        {gameState.isGameOver && (
+          <View className="z-10 absolute h-96 top-56 left-10 right-10 bottom-15 items-center  ">
             <EndGameBanner {...endGameBannerProps} />
-          ) : (
-            <>
+          </View>
+        )}
+        {!gameState.isGameOver && (
+          <>
+            <View className="flex-1 items-center">
               <Text className="text-center my-2">
                 Tries remaining: {gameState.triesRemaining}
               </Text>
@@ -289,9 +300,9 @@ export default function Game({ route }: GameScreenProps) {
                   </Text>
                 </TouchableOpacity>
               </View>
-            </>
-          )}
-        </View>
+            </View>
+          </>
+        )}
       </View>
     </>
   );

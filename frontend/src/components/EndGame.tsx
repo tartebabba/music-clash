@@ -5,6 +5,7 @@ export default function EndGameBanner(props) {
   const {
     gameState,
     foundGroups,
+    gameArtists,
     setShowFeedback,
     setGameState,
     setItems,
@@ -28,7 +29,7 @@ export default function EndGameBanner(props) {
       ? 'Winner!'
       : 'Next Time!';
   return (
-    <View className="p-2 m-2 rounded-md w-[75%] border items-center bg-slate-100">
+    <View className="p-2 m-2 rounded-md border items-center bg-slate-100 ">
       {gameState.isGameOver && (
         <>
           <Text className="text-xl"> {feedbackText} </Text>
@@ -36,10 +37,20 @@ export default function EndGameBanner(props) {
       )}
 
       <>
-        <Text className="text-justify m-1 p-1">
+        <Text className="text-justify m-1 p-1 text-l my-2">
           {`You got ${foundGroups.length / 4}/4 correct, in 4 tries.`}
         </Text>
-        <View className="flex-row">
+        <Text className="text-lg font-bold my-2">
+          The artists were:
+        </Text>
+        {gameArtists.map(
+          (artist: string, index: number) => (
+            <Text key={index} className="text-lg my-1">
+              {artist}
+            </Text>
+          )
+        )}
+        <View className="flex-row my-2">
           <TouchableOpacity className=" w-[40%] bg-slate-700 m-2 p-1 rounded-md ">
             <Text className="text-white text-lg text-center">
               Share
