@@ -38,7 +38,7 @@ export default function EndGameBanner(props) {
 
       <>
         <Text className="text-justify m-1 p-1 text-l my-2">
-          {`You got ${foundGroups.length / 4}/4 correct, in 4 tries.`}
+          {`You got ${foundGroups.length / 4}/4 correct, with ${gameState.triesRemaining} tries remaining.`}
         </Text>
         <Text className="text-lg font-bold my-2">
           The artists were:

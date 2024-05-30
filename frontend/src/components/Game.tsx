@@ -75,6 +75,7 @@ export default function Game({ route }: GameScreenProps) {
         isSpotifyGame: false,
       }));
       let gameID = Math.floor(Math.random() * 10) + 1;
+      // let gameID = 4;
       getGameDetails(gameID).then(
         (randomDefaultGameItems) => {
           if (
