@@ -2,7 +2,6 @@ import { Image, Text, TouchableOpacity, View } from 'react-native';
 import { Props } from './types';
 import { useUser } from './ContextProvider';
 import { useNavigation } from '@react-navigation/native';
-
 import ProvideProfilePicture from '../utils/utils';
 import NavBar from './NavBar';
 
@@ -11,11 +10,10 @@ export default function ProfilePage({ route }: Props) {
   const { user, setUser } = useUser();
   console.log(route.params);
   console.log(user, 'from profile page');
-  
+
   function handleLoginPress() {
     setUser(null)
     navigation.navigate('HomePage');
-
   }
 
   return (

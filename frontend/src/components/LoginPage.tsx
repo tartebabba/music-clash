@@ -6,7 +6,12 @@ import {
   StyleSheet,
   Pressable,
 } from 'react-native';
-import { createUser, loginUser, getUserByEmail, checkUsernameExists} from '../../../server/db';
+import {
+  createUser,
+  loginUser,
+  getUserByEmail,
+  checkUsernameExists,
+} from '../../../server/db';
 import LoadingPage from './LoadingPage';
 import { Props, User } from './types';
 import { useUser } from './ContextProvider';
@@ -23,7 +28,8 @@ export default function Login() {
 
   const [signUpName, setSignUpName] = useState('');
   const [signUpUserName, setSignUpUserName] = useState('');
-  const [usernameExists, setUsernameExists] = useState(false);
+  const [usernameExists, setUsernameExists] =
+    useState(false);
   const [signUpEmail, setSignUpEmail] = useState('');
   const [signUpPassword, setSignUpPassword] = useState('');
 
@@ -32,27 +38,30 @@ export default function Login() {
   const navigation = useNavigation();
 
   const handleLogin = async () => {
-    const userLogin = {email: loginEmail, password: loginPassword}
-    const response  = await loginUser(userLogin)
-    if(response) {
-      const data = await getUserByEmail(loginEmail)
-  
+    const userLogin = {
+      email: loginEmail,
+      password: loginPassword,
+    };
+    const response = await loginUser(userLogin);
+    if (response) {
+      const data = await getUserByEmail(loginEmail);
+
       if (data && data.length > 0) {
         const { name, username } = data[0];
-        setUser({name: name,
-        username: username,
-        email: loginEmail})
-        navigation.navigate("ProfilePage");
-        setLoginEmail('')
-        setLoginPassword('')
+        setUser({
+          name: name,
+          username: username,
+          email: loginEmail,
+        });
+        navigation.navigate('ProfilePage');
+        setLoginEmail('');
+        setLoginPassword('');
       }
-    }
-    else {
-      console.error("Login failed");
+    } else {
+      console.error('Login failed');
     }
   };
-  
-  
+
   const handleSignUp = () => {
     const user = {
       name: signUpName,
@@ -112,11 +121,17 @@ export default function Login() {
                 value={signUpUserName}
                 onChangeText={setSignUpUserName}
                 onBlur={async (e) => {
-                  const exists = await checkUsernameExists(e.nativeEvent.text) 
-                  setUsernameExists(exists)
+                  const exists = await checkUsernameExists(
+                    e.nativeEvent.text
+                  );
+                  setUsernameExists(exists);
                 }}
               />
-              {usernameExists && <Text className='m-1'>Username already exists!</Text>}
+              {usernameExists && (
+                <Text className="m-1">
+                  Username already exists!
+                </Text>
+              )}
               {signUpUserName.length > 20 && (
                 <Text>Too long</Text>
               )}
@@ -153,9 +168,7 @@ export default function Login() {
         ) : (
           <>
             <View className="w-9/12">
-              <Text className={TextLabelStyle}>
-                Email
-              </Text>
+              <Text className={TextLabelStyle}>Email</Text>
               <TextInput
                 autoCapitalize="none"
                 placeholder="Email"
@@ -206,4 +219,3 @@ export default function Login() {
     </>
   );
 }
-
