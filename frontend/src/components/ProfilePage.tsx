@@ -8,8 +8,6 @@ import NavBar from './NavBar';
 export default function ProfilePage({ route }: Props) {
   const navigation = useNavigation()
   const { user, setUser } = useUser();
-  console.log(route.params);
-  console.log(user, 'from profile page');
 
   function handleLoginPress() {
     setUser(null)
@@ -19,19 +17,33 @@ export default function ProfilePage({ route }: Props) {
   return (
     <>
       <View><NavBar/></View>
-      <View
-        className='items-center p-5 pt-16'
-      >
-        <Image className='h-40 w-40 m-8 rounded-full' source={require('../../../assets/default_pfp.jpeg')} />
-        <Text className='text-4xl '>{user?.name}</Text>
-        <Text>{user?.username}</Text>
-        <Text>{user?.email}</Text>
-        <TouchableOpacity
-          onPress={handleLoginPress}
-          className="border w-7/12  h-14 justify-center items-center rounded m-1 bg-black"
-        >
-          <Text className="text-white text-xl">Logout</Text>
-        </TouchableOpacity>
+      <View className='p-5 pt-8'>
+        <View className='items-center pb-4'>
+          <Image className='h-40 w-40 mt-5 rounded-full' source={require('../../../assets/default_pfp.jpeg')} />
+        </View>
+
+        <Text className='p-2 text-center text-2xl'>Profile</Text>
+
+        <View className='mb-4 p-2 border-t-2 border-t-slate-500'>
+          <Text>name</Text>
+          <Text className='text-2xl '>{user?.name}</Text>
+        </View>
+        
+        <View className='mb-4 p-2'>
+          <Text>username</Text>
+          <Text className='text-2xl '>{user?.username}</Text>
+        </View>
+
+        <View className='mb-10 p-2 border-b-2 border-b-slate-500'>
+          <Text>email</Text>
+          <Text className='text-2xl '>{user?.email}</Text>
+        </View>
+
+        <View className='items-center'>
+          <TouchableOpacity onPress={handleLoginPress} className="border w-7/12  h-14 justify-center items-center rounded m-1 bg-black">
+            <Text className="text-white text-xl">Logout</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </>
   );
