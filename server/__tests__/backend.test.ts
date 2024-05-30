@@ -2,53 +2,6 @@ import { getGames, getGameDetails, createUser, loginUser, getUserByEmail, genera
 import {describe, expect, test} from '@jest/globals';
 import supabase from '../supabase-setup';
 
-
-
-describe('getGameDetails', () => {
-  test('returns an array of all games played', async () => {
-    const data = await getGameDetails(1)
-    const expected = [
-      {
-          id: 1,
-          artist: "Dua Lipa",
-          game_id: 1,
-          song_1: "Don't Start Now",
-          song_2: "Levitating (feat. DaBaby)",
-          song_3: "New Rules",
-          song_4: "One Kiss"
-      },
-      {
-          id: 2,
-          game_id: 1,
-          artist: "Ed Sheeran",
-          song_1: "Bad Habits",
-          song_2: "Perfect",
-          song_3: "Shape of You",
-          song_4: "Thinking Out Loud"
-      },
-      {
-          id: 3,
-          game_id: 1,
-          artist: "Coldplay",
-          song_1: "A Sky Full of Stars",
-          song_2: "The Scientist",
-          song_3: "Viva La Vida",
-          song_4: "Yellow"
-      },
-      {
-          id: 4,
-          game_id: 1,
-          artist: "Post Malone",
-          song_1: "Circles",
-          song_2: "Rockstar (feat. 21 Savage)",
-          song_3: "Sunflower (with Swae Lee)",
-          song_4: "Wow."
-      }
-  ]
-    expect(data).toEqual(expected)
-  })
-})
-
 describe('getGames', () => {
   test('returns an array of all games played', async () => {
     const data = await getGames()

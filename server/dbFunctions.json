@@ -35,6 +35,22 @@
                 }
             ]
     },
+    "createUser":{
+        "description": "inserts a new user into users table and Supabase Auth users. Throws an error if user already exists",
+        "exampleUserObject": {
+            "name": "John Doe",
+            "username": "john.doe",
+            "email": "john.doe@example.com",
+            "password": "SecureP@ssw0rd!"
+        }
+    },
+    "loginUser":{
+        "description": "when passed an email and password, logs in a user via Supabase Auth. Returns null if user doesn't exist or password incorrect",
+        "exampleUserLoginObject":{
+            "email": "John Doe",
+            "password": "SecureP@ssw0rd!"
+        }
+    },
     "createGame":{
         "description": "inserts a new game into games table, then uses game_id to insert the artists & songs provided in postObject into game_details table",
         "examplePostObject": [{
@@ -52,22 +68,7 @@
             "song_4": "Skate"
           }]
     },
-    "createUser":{
-        "description": "inserts a new user into users table and Supabase Auth users. Throws an error if user already exists",
-        "exampleUserObject": {
-            "name": "John Doe",
-            "username": "john.doe",
-            "email": "john.doe@example.com",
-            "password": "SecureP@ssw0rd!"
-        }
-    },
-    "loginUser":{
-        "description": "when passed an email and password, logs in a user via Supabase Auth. Returns null if user doesn't exist or password incorrect",
-        "exampleUserLoginObject":{
-            "email": "John Doe",
-            "password": "SecureP@ssw0rd!"
-        }
-    },
+
     "getUserByEmail":{
         "description": "when passed an email string, returns the user_id, username, email and name of user",
         "exampleResponse": [

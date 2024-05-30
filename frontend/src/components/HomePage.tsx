@@ -10,6 +10,7 @@ import * as WebBrowser from 'expo-web-browser';
 import SpotifyConnectButton from './SpotifyConnect';
 
 import { useUser } from './ContextProvider';
+import { useState } from 'react';
 WebBrowser.maybeCompleteAuthSession();
 
 export default function HomePage({ navigation }: Props) {
@@ -29,7 +30,12 @@ export default function HomePage({ navigation }: Props) {
   }
 
   function handleLoginPress() {
-    navigation.navigate('Login');
+    if(user){
+      navigation.navigate('ProfilePage');
+    }
+    else {
+      navigation.navigate('Login');
+    } 
   }
 
   return (
@@ -62,7 +68,8 @@ export default function HomePage({ navigation }: Props) {
         onPress={handleLoginPress}
         className="border w-7/12  h-14 justify-center items-center rounded m-1 bg-black"
       >
-        <Text className="text-white text-xl">Login</Text>
+        <Text className="text-white text-xl">{user ? `Profile` : `Login`}</Text>
+        
       </TouchableOpacity>
       <View className="p-2 m-2 rounded-md w-7/12 h-14 border bg-green-400 items-center">
         <SpotifyConnectButton fontSize={'text-xl'} />
