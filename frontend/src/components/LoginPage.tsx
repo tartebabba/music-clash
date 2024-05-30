@@ -43,6 +43,8 @@ export default function Login() {
         username: username,
         email: loginEmail})
         navigation.navigate("ProfilePage");
+        setLoginEmail('')
+        setLoginPassword('')
       }
     }
     else {
@@ -68,6 +70,10 @@ export default function Login() {
             navigation.navigate('ProfilePage', {
               user: data,
             });
+            setSignUpName('');
+            setSignUpUserName('');
+            setSignUpEmail('');
+            setSignUpPassword('');
           }
         }
       })
