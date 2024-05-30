@@ -68,6 +68,20 @@
             "password": "SecureP@ssw0rd!"
         }
     },
+    "getUserByEmail":{
+        "description": "when passed an email string, returns the user_id, username, email and name of user",
+        "exampleResponse": [
+            {
+              "user_id": 2,
+              "name": "Robbie Chapman",
+              "username": "robbochobbo",
+              "email": "robbiechapman@gmail.com"
+            }
+          ]
+    },
+    "checkUsernameExists": {
+        "description": "when passed a username string, returns true if username exists and false if it does not"
+    },
     "insertUserGame":{
         "description": "inserts a new user-game into user_games table",
         "exampleUserGameObject": {

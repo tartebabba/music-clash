@@ -1,4 +1,4 @@
-import { getGames, getGameDetails, createUser, loginUser, getUserByEmail, generateRandomVanillaGames} from '../db';
+import { getGames, getGameDetails, createUser, loginUser, getUserByEmail, generateRandomVanillaGames, checkUsernameExists} from '../db';
 import {describe, expect, test} from '@jest/globals';
 import supabase from '../supabase-setup';
 
@@ -137,6 +137,7 @@ describe('getGames', () => {
     expect(data).toEqual(expected)
   })
 })
+
 describe('getGameDetails', () => {
   test('when passed a game ID, returns an array of objects containing the artists and songs in that game', async () => {
     const data = await getGameDetails(3)
@@ -249,4 +250,12 @@ describe('getUserByEmail', () => {
   })
 })
 
+describe('checkUsernameExists', () => {
+  test('when passed a username string, returns true if username exists and false if it does not', async () => {
+    const bool = await checkUsernameExists("robbochobbo")
+    expect(bool).toBe(true)
+    const bool2 = await checkUsernameExists("robbochobbo123456789")
+    expect(bool2).toBe(false)
+  })
+})
 

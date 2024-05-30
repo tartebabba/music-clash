@@ -6,7 +6,7 @@ import {
   StyleSheet,
   Pressable,
 } from 'react-native';
-import { createUser, loginUser, getUserByEmail} from '../../../server/db';
+import { createUser, loginUser, getUserByEmail, checkUsernameExists} from '../../../server/db';
 import LoadingPage from './LoadingPage';
 import { Props, User } from './types';
 import { useUser } from './ContextProvider';
@@ -23,8 +23,10 @@ export default function Login() {
 
   const [signUpName, setSignUpName] = useState('');
   const [signUpUserName, setSignUpUserName] = useState('');
+  const [usernameExists, setUsernameExists] = useState(false);
   const [signUpEmail, setSignUpEmail] = useState('');
   const [signUpPassword, setSignUpPassword] = useState('');
+
   const [isLoading, setIsLoading] = useState(false);
   const { user, setUser } = useUser();
   const navigation = useNavigation();
@@ -78,7 +80,6 @@ export default function Login() {
         <LoadingPage></LoadingPage>
       </View>
     );
-
   return (
     <>
       <View className="justify-center items-center h-full border">
@@ -99,16 +100,23 @@ export default function Login() {
                 Username
               </Text>
               <TextInput
+                autoCapitalize="none"
                 className={TextInputStyle}
                 placeholder="Username"
                 value={signUpUserName}
                 onChangeText={setSignUpUserName}
+                onBlur={async (e) => {
+                  const exists = await checkUsernameExists(e.nativeEvent.text) 
+                  setUsernameExists(exists)
+                }}
               />
+              {usernameExists && <Text className='m-1'>Username already exists!</Text>}
               {signUpUserName.length > 20 && (
                 <Text>Too long</Text>
               )}
               <Text className={TextLabelStyle}>Email</Text>
               <TextInput
+                autoCapitalize="none"
                 className={TextInputStyle}
                 placeholder="Email"
                 value={signUpEmail}
@@ -118,6 +126,7 @@ export default function Login() {
                 Password
               </Text>
               <TextInput
+                autoCapitalize="none"
                 className={TextInputStyle}
                 placeholder="Password"
                 value={signUpPassword}
@@ -125,8 +134,9 @@ export default function Login() {
                 secureTextEntry
               />
               <Pressable
+                disabled={usernameExists}
                 onPress={handleSignUp}
-                className="rounded-md bg-black my-4 mx-1 p-2"
+                className={`rounded-md my-4 mx-1 p-2 ${usernameExists ? 'bg-gray-500' : 'bg-black'}`}
               >
                 <Text className="text-white text-center">
                   Sign up
@@ -141,6 +151,7 @@ export default function Login() {
                 Email
               </Text>
               <TextInput
+                autoCapitalize="none"
                 placeholder="Email"
                 value={loginEmail}
                 onChangeText={setLoginEmail}
@@ -150,6 +161,7 @@ export default function Login() {
                 Password
               </Text>
               <TextInput
+                autoCapitalize="none"
                 placeholder="Password"
                 value={loginPassword}
                 onChangeText={setLoginPassword}
