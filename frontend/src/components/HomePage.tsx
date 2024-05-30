@@ -9,15 +9,23 @@ import { Props } from './types';
 import * as WebBrowser from 'expo-web-browser';
 import SpotifyConnectButton from './SpotifyConnect';
 
+import { useUser } from './ContextProvider';
 WebBrowser.maybeCompleteAuthSession();
 
 export default function HomePage({ navigation }: Props) {
+  const { user } = useUser();
+
   function handleGamePress() {
     navigation.navigate('Game', { artists: [] });
   }
 
   function handleMultilayerPress() {
-    navigation.navigate('Multiplayer', { artists: [] });
+    if(user){
+      navigation.navigate('Multiplayer', { artists: [] });
+    }
+    else{
+      navigation.navigate('Login');
+    }
   }
 
   function handleLoginPress() {
