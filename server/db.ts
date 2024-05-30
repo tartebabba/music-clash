@@ -8,7 +8,6 @@ export async function getGames() {
   } catch (error) {
     console.error("Error fetching games:", error);
   }
-
 }
 
 export async function getGameDetails(gameID: Number) {
@@ -180,6 +179,26 @@ export async function getUserByEmail(email:String) {
   }
 }
 
+export async function checkUsernameExists(username:String) {
+  try {
+    const { data, error:checkUsernameExistsError } = await supabase
+    .from('users')
+    .select()
+    .eq('username', username);
+
+    
+    if (checkUsernameExistsError){ throw new Error('error checking for username')}
+    if (data.length === 0){
+      return false
+    }
+    else{
+      return true
+    }
+  } catch (error) {
+    console.error("Error checking for username:", error);
+    return true
+  }
+}
 
 export async function insertUserGame(userGame: UserGame) {
   try {
