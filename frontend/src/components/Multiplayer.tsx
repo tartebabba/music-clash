@@ -25,7 +25,8 @@ export default function Multiplayer({
   navigation,
 }: MultiplayerScreenProps) {
   const { user, setUser } = useUser();
-  console.log(user);
+
+  const [gameUser, setGameUser] = useState(user?.username);
 
   const { artists } = route.params;
   const [items, setItems] = useState(artists);
@@ -125,7 +126,6 @@ export default function Multiplayer({
     useState<string>('');
   const [lives, setLives] = useState<number>(4);
   const [room, setRoom] = useState<string>('');
-  // const [user, setUser] = useState<string>('user1');
   const [players, setPlayers] = useState<string[]>([]);
   const [opponentEvents, setOpponentEvents] =
     useState<OpponentEvents>({
@@ -261,7 +261,7 @@ export default function Multiplayer({
         setGuessResult('correct');
         correct = true;
 
-        socket.emit('groupFound', room, user, selected);
+        socket.emit('groupFound', room, gameUser, selected);
 
         if (foundGroups.length === 12) {
           setGuessResult('winner');
@@ -272,7 +272,12 @@ export default function Multiplayer({
 
     if (correct === false) {
       setLives(lives - 1);
-      socket.emit('incorrectGuess', room, user, selected);
+      socket.emit(
+        'incorrectGuess',
+        room,
+        gameUser,
+        selected
+      );
     }
   }
 
@@ -327,20 +332,20 @@ export default function Multiplayer({
   }
 
   const handleCreateRoom = () => {
-    const newRoomName = `${user}'s Room`;
+    const newRoomName = `${gameUser}'s Room`;
     setRoom(newRoomName);
-    socket.emit('createRoom', user, newRoomName);
+    socket.emit('createRoom', gameUser, newRoomName);
   };
 
   const handleJoinRoom = () => {
     if (selectedRoom) {
       setRoom(selectedRoom);
-      socket.emit('joinRoom', user, selectedRoom);
+      socket.emit('joinRoom', gameUser, selectedRoom);
     }
   };
 
   const handleLeaveRoom = () => {
-    socket.emit('leaveRoom', user, room);
+    socket.emit('leaveRoom', gameUser, room);
     setRoom('');
     setSelectedRoom('');
   };
@@ -366,7 +371,7 @@ export default function Multiplayer({
 
   useEffect(() => {
     if (gameOver) {
-      socket.emit('gameOver', user, room, lives);
+      socket.emit('gameOver', gameUser, room, lives);
     }
   }, [gameOver]);
 
